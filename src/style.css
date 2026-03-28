@@ -404,6 +404,7 @@ section {
     transition: 0.3s ease;
     outline: none;
     font-size: 16px;
+    resize: none;
 }
 
 #contact-form input:focus,
