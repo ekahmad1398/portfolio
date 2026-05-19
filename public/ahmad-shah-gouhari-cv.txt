@@ -1,0 +1,39 @@
+AHMAD SHAH GOUHARI
+Frontend Developer
+
+GitHub
+https://github.com/ekahmad1398
+
+Summary
+Frontend-focused developer with a passion for turning ideas into polished, responsive web interfaces. Enjoys building modern websites with strong visual structure, accessible UI patterns, and clean implementation.
+
+Core Skills
+- HTML
+- CSS
+- JavaScript
+- React
+- Next.js
+- Tailwind CSS
+- Responsive Design
+- Accessibility
+- UI Polish
+- Motion and Interaction Design
+
+Public Projects
+1. Rumiint
+   Rumi International School website
+   Repo: https://github.com/ekahmad1398/Rumiint
+   Live: https://rumiint.vercel.app
+
+2. Portfolio
+   Personal portfolio website
+   Repo: https://github.com/ekahmad1398/portfolio
+   Live: https://portfolio-phi-olive-94.vercel.app
+
+3. Ajmal-Roshan
+   ISP card list
+   Repo: https://github.com/ekahmad1398/Ajmal-Roshan
+   Live: https://ajmal-roshan-eight.vercel.app
+
+Public Contact
+GitHub is the only public contact channel extracted from the current portfolio and GitHub profile data.
