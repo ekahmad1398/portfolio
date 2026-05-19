@@ -391,3 +391,154 @@ button {
   border-color: var(--border-strong);
   background: rgba(56, 189, 248, 0.09);
 }
+
+.loader-panel::after,
+.loader-line,
+.loader-chip,
+.loader-tile {
+  position: relative;
+  overflow: hidden;
+}
+
+.loader-line,
+.loader-chip,
+.loader-tile {
+  background: rgba(148, 163, 184, 0.12);
+}
+
+.loader-panel::after,
+.loader-line::after,
+.loader-chip::after,
+.loader-tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.06) 30%,
+    rgba(125, 211, 252, 0.2) 50%,
+    rgba(255, 255, 255, 0.06) 70%,
+    transparent 100%
+  );
+  animation: loader-shimmer 2s ease-in-out infinite;
+}
+
+.loader-progress-bar {
+  width: 100%;
+  background: linear-gradient(90deg, #38bdf8 0%, #7dd3fc 40%, #22d3ee 100%);
+  transform-origin: left center;
+  animation: loader-progress 1.9s ease-in-out infinite;
+}
+
+.loader-dot {
+  display: inline-flex;
+  height: 0.65rem;
+  width: 0.65rem;
+  border-radius: 999px;
+  background: #7dd3fc;
+  box-shadow: 0 0 0 0 rgba(125, 211, 252, 0.45);
+  animation: loader-ping-soft 1.8s ease-out infinite;
+}
+
+.loader-orb {
+  position: relative;
+  display: flex;
+  height: 3.8rem;
+  width: 3.8rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader-orb::before {
+  content: "";
+  position: absolute;
+  inset: 0.45rem;
+  border-radius: 999px;
+  border: 1px solid rgba(125, 211, 252, 0.18);
+}
+
+.loader-orb span {
+  position: absolute;
+  display: block;
+  height: 0.6rem;
+  width: 0.6rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #7dd3fc 0%, #38bdf8 100%);
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.42);
+  animation: loader-orbit 2.8s linear infinite;
+}
+
+.loader-orb span:nth-child(2) {
+  animation-delay: -0.93s;
+}
+
+.loader-orb span:nth-child(3) {
+  animation-delay: -1.86s;
+}
+
+@keyframes loader-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes loader-progress {
+  0% {
+    transform: scaleX(0.2);
+    opacity: 0.72;
+  }
+
+  50% {
+    transform: scaleX(0.9);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scaleX(0.3);
+    opacity: 0.82;
+  }
+}
+
+@keyframes loader-orbit {
+  0% {
+    transform: rotate(0deg) translateX(1.2rem) rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg) translateX(1.2rem) rotate(-360deg);
+  }
+}
+
+@keyframes loader-ping-soft {
+  0% {
+    box-shadow: 0 0 0 0 rgba(125, 211, 252, 0.45);
+    opacity: 0.85;
+  }
+
+  70% {
+    box-shadow: 0 0 0 0.75rem rgba(125, 211, 252, 0);
+    opacity: 1;
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(125, 211, 252, 0);
+    opacity: 0.82;
+  }
+}
+
+@keyframes loader-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(0, -16px, 0);
+  }
+}
+
+.loader-float {
+  animation: loader-float 5.6s ease-in-out infinite;
+}

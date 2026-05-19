@@ -1,11 +1,13 @@
 import type { MetadataRoute } from "next";
 
-import { portfolio } from "@/data/portfolio";
+import { getSiteUrl } from "@/lib/site-url";
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  const siteUrl = getSiteUrl();
+
   return [
     {
-      url: portfolio.siteUrl,
+      url: siteUrl,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 1,

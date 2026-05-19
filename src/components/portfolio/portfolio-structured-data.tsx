@@ -1,5 +1,6 @@
 import { portfolio } from "@/data/portfolio";
 import type { PortfolioGithubData } from "@/lib/github";
+import { getSiteUrl } from "@/lib/site-url";
 
 type PortfolioStructuredDataProps = {
   githubData: PortfolioGithubData;
@@ -8,11 +9,13 @@ type PortfolioStructuredDataProps = {
 export function PortfolioStructuredData({
   githubData,
 }: PortfolioStructuredDataProps) {
+  const siteUrl = getSiteUrl();
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Person",
     name: portfolio.fullName,
-    url: portfolio.siteUrl,
+    url: siteUrl,
     image: githubData.profile.avatarUrl,
     jobTitle: portfolio.role,
     email: portfolio.email,
@@ -22,7 +25,7 @@ export function PortfolioStructuredData({
       "@type": "Organization",
       name: "Independent",
     },
-    mainEntityOfPage: portfolio.siteUrl,
+    mainEntityOfPage: siteUrl,
   };
 
   return (

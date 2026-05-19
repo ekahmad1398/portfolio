@@ -3,6 +3,7 @@ import { IBM_Plex_Mono, Plus_Jakarta_Sans, Sora } from "next/font/google";
 
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { portfolio } from "@/data/portfolio";
+import { getSiteUrl, getSiteUrlObject } from "@/lib/site-url";
 
 import "./globals.css";
 
@@ -22,7 +23,7 @@ const ibmPlexMono = IBM_Plex_Mono({
   subsets: ["latin"],
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? portfolio.siteUrl;
+const siteUrl = getSiteUrl();
 
 export const viewport: Viewport = {
   themeColor: [
@@ -33,7 +34,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: getSiteUrlObject(),
   title: {
     default: `${portfolio.fullName} | ${portfolio.role}`,
     template: `%s | ${portfolio.fullName}`,
@@ -95,7 +96,7 @@ export default function RootLayout({
       className={`${plusJakartaSans.variable} ${sora.variable} ${ibmPlexMono.variable}`}
     >
       <body>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
           {children}
         </ThemeProvider>
       </body>
