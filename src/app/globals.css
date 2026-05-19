@@ -310,11 +310,19 @@ button {
 
 .soft-button {
   border: 1px solid rgba(56, 189, 248, 0.22);
-  background: rgba(208, 223, 234, 0.96);
-  color: var(--accent-deep);
+  background: linear-gradient(135deg, rgba(186, 218, 236, 0.92) 0%, rgba(214, 231, 241, 0.98) 100%);
+  color: #12314c;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
+  box-shadow: 0 16px 34px rgba(56, 189, 248, 0.12);
+}
+
+.dark .soft-button {
+  border-color: rgba(125, 211, 252, 0.28);
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.18) 0%, rgba(37, 99, 235, 0.16) 100%);
+  color: #e0f2fe;
+  box-shadow: 0 20px 44px rgba(2, 6, 23, 0.28);
 }
 
 .nav-link {
@@ -354,10 +362,20 @@ button {
   background: rgba(213, 224, 232, 0.98);
 }
 
+.soft-button:hover {
+  border-color: rgba(56, 189, 248, 0.38);
+  background: linear-gradient(135deg, rgba(174, 211, 232, 0.98) 0%, rgba(205, 227, 240, 1) 100%);
+}
+
 .dark .secondary-button:hover,
 .dark .icon-button:hover,
 .dark .nav-link:hover {
   background: rgba(255, 255, 255, 0.08);
+}
+
+.dark .soft-button:hover {
+  border-color: rgba(125, 211, 252, 0.42);
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.24) 0%, rgba(59, 130, 246, 0.22) 100%);
 }
 
 .palette-group [cmdk-group-heading] {

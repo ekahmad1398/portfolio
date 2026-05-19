@@ -43,6 +43,7 @@ export const portfolio = {
   githubUrl: "https://github.com/ekahmad1398",
   siteUrl: "https://portfolio-phi-olive-94.vercel.app",
   avatarUrl: "https://avatars.githubusercontent.com/u/137905017?v=4",
+  resumePath: "/ahmad-shah-gouhari-cv.pdf",
   email: "a78250006437@gmail.com",
   socialLinks: [
     {

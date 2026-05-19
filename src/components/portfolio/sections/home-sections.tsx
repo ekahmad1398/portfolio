@@ -85,7 +85,7 @@ export function HeroSection({ githubData }: { githubData: PortfolioGithubData })
               <Github size={16} />
               GitHub
             </a>
-            <a href="/ahmad-shah-gouhari-cv.txt" download className="soft-button px-6 py-3.5">
+            <a href={portfolio.resumePath} download className="soft-button px-6 py-3.5">
               <Download size={16} />
               Download CV
             </a>
@@ -416,7 +416,7 @@ export function ContactSection() {
                 <Github size={16} />
                 Open GitHub
               </a>
-              <a href="/ahmad-shah-gouhari-cv.txt" download className="soft-button px-5 py-3">
+              <a href={portfolio.resumePath} download className="soft-button px-5 py-3">
                 <Download size={16} />
                 Download CV
               </a>
