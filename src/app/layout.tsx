@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { IBM_Plex_Mono, Plus_Jakarta_Sans, Sora } from "next/font/google";
 
+import { PageLoader } from "@/components/portfolio/page-loader";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { portfolio } from "@/data/portfolio";
 import { getSiteUrl, getSiteUrlObject } from "@/lib/site-url";
@@ -97,6 +98,7 @@ export default function RootLayout({
     >
       <body>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+          <PageLoader label="Opening the portfolio" />
           {children}
         </ThemeProvider>
       </body>
