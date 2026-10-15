@@ -53,8 +53,8 @@ function RepoCard({ repo, index, featured = false }: { repo: GithubRepoCard; ind
         <p className={`mt-3 max-w-2xl text-sm leading-6 text-muted-foreground ${featured ? "line-clamp-4 sm:text-base sm:leading-7" : "line-clamp-3"}`}>{description}</p>
       </div>
       <div className="mt-auto flex flex-wrap items-center gap-2 border-t border-border/70 pt-5 mt-6 pl-2">
-        {repo.homepage ? <Button asChild size="sm" className="h-9 rounded-full bg-primary px-4 text-xs text-primary-foreground hover:bg-primary/90"><a href={repo.homepage} target="_blank" rel="noreferrer">Visit project <ArrowUpRight size={13} /></a></Button> : null}
-        <a href={repo.url} target="_blank" rel="noreferrer" className="inline-flex h-9 items-center gap-2 rounded-full border border-border px-4 text-xs font-medium text-foreground transition hover:border-[color:var(--project-accent)] hover:bg-muted/50"><Github size={14} /> Source code</a>
+        {repo.homepage ? <Button asChild size="sm" className="project-action h-9 rounded-full bg-primary px-4 text-xs text-primary-foreground hover:bg-primary/90"><a href={repo.homepage} target="_blank" rel="noreferrer">Visit project <ArrowUpRight size={13} /></a></Button> : null}
+        <a href={repo.url} target="_blank" rel="noreferrer" className="project-action inline-flex h-9 items-center gap-2 rounded-full border border-border px-4 text-xs font-medium text-foreground transition hover:border-[color:var(--project-accent)] hover:bg-muted/50"><Github size={14} /> Source code</a>
       </div>
     </article>
   );

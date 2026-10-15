@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { ArrowRight, Circle, Database, ExternalLink, Github, Mail, Server, ShieldCheck } from "lucide-react";
+import { ArrowRight, Circle, Database, Download, ExternalLink, Github, Mail, Server, ShieldCheck } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { CSSProperties, PointerEvent as ReactPointerEvent } from "react";
 import type { IconType } from "react-icons";
@@ -169,8 +169,8 @@ export function AboutSection({ avatarUrl }: { avatarUrl: string }) {
       <div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
         <Reveal>
           <div className="max-w-sm">
-            <div className="relative aspect-[5/4] overflow-hidden rounded-2xl bg-muted">
-              <Image src={avatarUrl} alt={`${portfolio.fullName} portrait`} fill sizes="(max-width: 768px) 320px, 420px" className="object-cover grayscale-[18%]" />
+            <div className="relative aspect-square overflow-hidden rounded-2xl bg-muted">
+              <Image src={avatarUrl} alt={`${portfolio.fullName} portrait`} fill sizes="(max-width: 768px) 320px, 420px" className="object-cover object-center grayscale-[18%]" />
             </div>
             <div className="mt-4 flex items-center justify-between border-b border-border pb-3">
               <p className="font-heading text-sm font-semibold text-foreground">{portfolio.fullName}</p>
@@ -185,6 +185,12 @@ export function AboutSection({ avatarUrl }: { avatarUrl: string }) {
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">A little about how I build</p>
             <h2 className="mt-5 max-w-2xl font-heading text-3xl font-medium leading-tight tracking-[-0.04em] text-foreground sm:text-5xl">From the first click to the last query.</h2>
             <p className="mt-6 max-w-2xl text-base leading-8 text-muted-foreground">{portfolio.shortBio} {portfolio.about}</p>
+
+            <Button asChild variant="outline" className="mt-6 rounded-full px-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/50 hover:bg-primary/10 hover:text-primary hover:shadow-[0_8px_24px_rgba(34,211,238,0.16)]">
+              <a href={portfolio.resumePath} download>
+                <Download size={16} /> Download CV
+              </a>
+            </Button>
 
             <div className="mt-10 border-t border-border">
               {portfolio.services.map((service, index) => (

@@ -38,7 +38,7 @@ export default async function HomePage() {
 
         <main id="main-content" className="relative z-10">
           <HeroSection githubData={githubData} />
-          <AboutSection avatarUrl={githubData.profile.avatarUrl} />
+          <AboutSection avatarUrl="/naruto-profile.jpeg" />
           <SkillsSection />
           {availableRepos.length ? <FeaturedProjectsSection repos={availableRepos} /> : null}
           <ExperienceSection />

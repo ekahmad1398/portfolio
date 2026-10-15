@@ -222,10 +222,43 @@ html:not(.dark) .hero-tech-node { border-color: rgba(34, 160, 67, 0.28); color: 
 html:not(.dark) .hero-tech-mongo { border-color: rgba(16, 145, 72, 0.25); color: #16834a; }
 html:not(.dark) .hero-tech-express { border-color: rgba(71, 65, 84, 0.2); color: #454052; }
 
+@property --project-border-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
 .project-card {
+  isolation: isolate;
   background-image: radial-gradient(ellipse at 100% 0%, color-mix(in srgb, var(--project-accent) 10%, transparent), transparent 42%);
   box-shadow: 0 14px 34px rgba(39, 31, 64, .09);
   transition: transform 280ms ease, border-color 280ms ease, background-color 280ms ease, box-shadow 280ms ease;
+}
+
+.project-card::after {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: conic-gradient(from var(--project-border-angle), transparent 0deg 275deg, var(--project-accent) 315deg, transparent 360deg);
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  transition: opacity 180ms ease;
+}
+
+.project-card:hover::after,
+.project-card:focus-within::after {
+  opacity: 1;
+  animation: project-border-spin 1.6s linear infinite;
+}
+
+@keyframes project-border-spin {
+  to { --project-border-angle: 360deg; }
 }
 
 .project-card::before {
@@ -246,6 +279,35 @@ html:not(.dark) .hero-tech-express { border-color: rgba(71, 65, 84, 0.2); color:
   background-color: var(--project-tint);
   box-shadow: 0 18px 42px color-mix(in srgb, var(--project-accent) 16%, transparent);
 }
+
+.project-action {
+  position: relative;
+  isolation: isolate;
+}
+
+.project-action::after {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  padding: 1.5px;
+  border-radius: inherit;
+  background: conic-gradient(from var(--project-border-angle), transparent 0deg 270deg, var(--project-accent) 310deg, transparent 360deg);
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  transition: opacity 180ms ease;
+}
+
+.project-action:hover::after,
+.project-action:focus-visible::after {
+  opacity: 1;
+  animation: project-border-spin 1.4s linear infinite;
+}
+
+.project-action:focus-visible { outline: 2px solid var(--project-accent); outline-offset: 3px; }
 
 body {
   min-height: 100vh;
@@ -417,10 +479,33 @@ body {
 }
 
 .hero-panel {
+  isolation: isolate;
   animation: hero-panel-arrive 700ms both ease-out, hero-panel-float 8s ease-in-out 700ms infinite;
   transform: perspective(900px) rotateX(var(--tilt-y, 0deg)) rotateY(var(--tilt-x, 0deg));
   transform-style: preserve-3d;
   transition: transform 140ms cubic-bezier(.2,.7,.2,1), border-color 260ms ease, box-shadow 260ms ease, filter 260ms ease;
+}
+
+.hero-panel::after {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: conic-gradient(from var(--project-border-angle), transparent 0deg 270deg, #67e8f9 305deg, #818cf8 335deg, transparent 360deg);
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  transition: opacity 180ms ease;
+}
+
+.hero-panel:hover::after,
+.hero-panel:focus-within::after {
+  opacity: 1;
+  animation: project-border-spin 1.8s linear infinite;
 }
 
 .typing-caret {
@@ -439,6 +524,10 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .typing-caret { animation: none; }
+  .project-card:hover::after,
+  .project-card:focus-within::after { animation: none; }
+  .project-action:hover::after,
+  .project-action:focus-visible::after { animation: none; }
 }
 
 .hero-workspace .hero-panel:hover {
@@ -537,6 +626,8 @@ html:not(.dark) .hero-workspace .hero-panel [class*="text-amber-"] {
   }
 
   .hero-panel { transform: none !important; }
+  .hero-panel:hover::after,
+  .hero-panel:focus-within::after { animation: none; }
 }
 
 a,
