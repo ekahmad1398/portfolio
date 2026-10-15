@@ -13,7 +13,7 @@ export type SkillCard = {
   description: string;
   category: string;
   proficiency: number;
-  icon: "html" | "css" | "javascript" | "typescript" | "react" | "next" | "tailwind" | "github" | "mongodb" | "express" | "node";
+  icon: "html" | "css" | "javascript" | "typescript" | "react" | "next" | "tailwind" | "github" | "mongodb" | "express" | "node" | "cpp" | "canva" | "photoshop" | "git" | "vscode" | "vite" | "motion";
 };
 
 export type ServiceCard = {
@@ -80,6 +80,13 @@ export const portfolio = {
     { name: "Next.js", category: "FRAMEWORK", description: "Production-ready React applications, routing, rendering, and deployment workflows.", proficiency: 84, icon: "next" },
     { name: "Tailwind CSS", category: "STYLING", description: "Responsive interfaces with consistent spacing, typography, and visual detail.", proficiency: 91, icon: "tailwind" },
     { name: "Git & GitHub", category: "WORKFLOW", description: "Version control, collaboration, and maintaining a clear project history.", proficiency: 82, icon: "github" },
+    { name: "C++", category: "LANGUAGE", description: "Core programming concepts and problem solving with C++.", proficiency: 72, icon: "cpp" },
+    { name: "Canva", category: "DESIGN", description: "Creating visual assets and presentation materials with Canva.", proficiency: 78, icon: "canva" },
+    { name: "Adobe Photoshop", category: "DESIGN", description: "Editing images and preparing visual assets for digital projects.", proficiency: 72, icon: "photoshop" },
+    { name: "Git", category: "WORKFLOW", description: "Version control and managing project changes with Git.", proficiency: 82, icon: "git" },
+    { name: "VS Code", category: "WORKFLOW", description: "Daily development workflow in Visual Studio Code.", proficiency: 88, icon: "vscode" },
+    { name: "Vite", category: "TOOLING", description: "Fast development and build tooling for modern web projects.", proficiency: 78, icon: "vite" },
+    { name: "Motion", category: "ANIMATION", description: "Creating smooth UI animations with Motion for React.", proficiency: 70, icon: "motion" },
   ] satisfies SkillCard[],
   techStack: ["MongoDB", "Express.js", "React", "Node.js", "JavaScript", "TypeScript", "HTML", "CSS", "Next.js", "Tailwind CSS", "REST APIs", "Git", "Vercel"],
   services: [

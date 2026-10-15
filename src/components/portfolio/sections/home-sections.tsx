@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { ArrowRight, Circle, Database, Download, ExternalLink, Github, Mail, Server, ShieldCheck } from "lucide-react";
 import { useEffect, useState } from "react";
-import type { CSSProperties, PointerEvent as ReactPointerEvent } from "react";
+import type { CSSProperties, MouseEvent as ReactMouseEvent, PointerEvent as ReactPointerEvent } from "react";
 import type { IconType } from "react-icons";
 import {
   SiCss,
@@ -17,7 +17,14 @@ import {
   SiExpress,
   SiNodedotjs,
   SiTypescript,
+  SiCplusplus,
+  SiCanva,
+  SiGit,
+  SiVite,
+  SiFramer,
 } from "react-icons/si";
+import { DiPhotoshop } from "react-icons/di";
+import { VscVscode } from "react-icons/vsc";
 
 import { portfolio } from "@/data/portfolio";
 import type { PortfolioGithubData } from "@/lib/github";
@@ -41,6 +48,13 @@ const skillIcons: Record<
   mongodb: { icon: SiMongodb, color: "text-[#13aa52]", surface: "border-[#13aa52]/30 bg-[#13aa52]/10", hover: "", accent: "#13aa52" },
   express: { icon: SiExpress, color: "text-[#171717] dark:text-white", surface: "border-slate-500/20 bg-slate-500/10", hover: "", accent: "#a1a1aa" },
   node: { icon: SiNodedotjs, color: "text-[#43853d] dark:text-[#68a063]", surface: "border-[#68a063]/35 bg-[#68a063]/10", hover: "", accent: "#68a063" },
+  cpp: { icon: SiCplusplus, color: "text-[#00599c] dark:text-[#659ad2]", surface: "border-[#00599c]/30 bg-[#00599c]/[0.08]", hover: "", accent: "#00599c" },
+  canva: { icon: SiCanva, color: "text-[#00a8cc] dark:text-[#31c5e5]", surface: "border-[#00c4cc]/30 bg-[#00c4cc]/[0.08]", hover: "", accent: "#00c4cc" },
+  photoshop: { icon: DiPhotoshop, color: "text-[#31a8ff]", surface: "border-[#31a8ff]/30 bg-[#31a8ff]/[0.08]", hover: "", accent: "#31a8ff" },
+  git: { icon: SiGit, color: "text-[#f05032]", surface: "border-[#f05032]/30 bg-[#f05032]/[0.08]", hover: "", accent: "#f05032" },
+  vscode: { icon: VscVscode, color: "text-[#007acc] dark:text-[#35a9ff]", surface: "border-[#007acc]/30 bg-[#007acc]/[0.08]", hover: "", accent: "#007acc" },
+  vite: { icon: SiVite, color: "text-[#646cff] dark:text-[#9296ff]", surface: "border-[#646cff]/30 bg-[#646cff]/[0.08]", hover: "", accent: "#646cff" },
+  motion: { icon: SiFramer, color: "text-[#8b5cf6] dark:text-[#b69cff]", surface: "border-[#8b5cf6]/30 bg-[#8b5cf6]/[0.08]", hover: "", accent: "#8b5cf6" },
 };
 
 const liveCode = `const getProjects = async (req, res) => {
@@ -97,6 +111,12 @@ function LiveCode({ code = liveCode, lineCount = 13 }: { code?: string; lineCoun
 }
 
 export function HeroSection({ githubData }: { githubData: PortfolioGithubData }) {
+  const [techIconPositions, setTechIconPositions] = useState({
+    react: { x: 53, y: 42 },
+    node: { x: 91, y: 62 },
+    mongo: { x: 49, y: 69 },
+    express: { x: 79, y: 62 },
+  });
   const featuredRepo = githubData.liveRepos[0] ?? githubData.featuredRepos[0] ?? githubData.repos[0];
   const featuredRepoDescription = featuredRepo?.name.toLowerCase().includes("multi-vendor-ecommerce")
     ? "A multi-vendor marketplace bringing products from multiple sellers together in one place."
@@ -117,15 +137,41 @@ export function HeroSection({ githubData }: { githubData: PortfolioGithubData })
     event.currentTarget.style.setProperty("--tilt-x", "0deg");
     event.currentTarget.style.setProperty("--tilt-y", "0deg");
   };
+  const moveTechIcon = (key: keyof typeof techIconPositions, event: ReactMouseEvent<HTMLButtonElement>) => {
+    const workspace = event.currentTarget.parentElement;
+    if (!workspace) return;
+    const bounds = workspace.getBoundingClientRect();
+    if (!bounds.width || !bounds.height) return;
+    const iconBounds = event.currentTarget.getBoundingClientRect();
+    const maxX = Math.max(0, bounds.width - iconBounds.width);
+    const maxY = Math.max(0, bounds.height - iconBounds.height);
+    let nextX = Math.random() * maxX;
+    let nextY = Math.random() * maxY;
+    const current = techIconPositions[key];
+    for (let attempt = 0; attempt < 6; attempt += 1) {
+      nextX = Math.random() * maxX;
+      nextY = Math.random() * maxY;
+      if (Math.hypot((nextX / bounds.width) * 100 - current.x, (nextY / bounds.height) * 100 - current.y) > 20) break;
+    }
+    setTechIconPositions((positions) => ({
+      ...positions,
+      [key]: { x: (nextX / bounds.width) * 100, y: (nextY / bounds.height) * 100 },
+    }));
+  };
+  const getTechIconStyle = (key: keyof typeof techIconPositions, accent: string) => ({
+    left: `${techIconPositions[key].x}%`,
+    top: `${techIconPositions[key].y}%`,
+    "--tech-accent": accent,
+  } as CSSProperties & { "--tech-accent": string });
 
   return (
     <section id="hero" className="hero-section relative isolate flex min-h-[calc(100svh-5rem)] w-full items-center overflow-hidden px-5 pb-14 pt-14 sm:px-7 sm:pb-20 sm:pt-16 lg:min-h-[calc(100svh-6rem)] lg:px-8 lg:pb-20 lg:pt-16">
-      <div className="relative z-10 mx-auto grid w-full max-w-[80rem] items-center gap-12 lg:grid-cols-[0.96fr_1.04fr] lg:gap-8 xl:gap-14">
-        <div className="relative z-10">
+      <div className="relative z-10 mx-auto grid w-full min-w-0 max-w-[80rem] grid-cols-1 items-center gap-12 lg:grid-cols-[0.96fr_1.04fr] lg:gap-8 xl:gap-14">
+        <div className="relative z-10 min-w-0">
           <Reveal><p className="inline-flex items-center gap-2 rounded-full border border-cyan-800/10 bg-cyan-100/70 px-3.5 py-2 font-mono text-[10px] uppercase tracking-[0.16em] text-cyan-950 dark:border-cyan-200/15 dark:bg-cyan-100/[0.045] dark:text-cyan-100 sm:text-[11px]"><span className="size-1.5 rounded-full bg-cyan-500 shadow-[0_0_12px_rgba(103,232,249,0.85)] dark:bg-cyan-300" /> Full-Stack Developer <span className="text-slate-500 dark:text-slate-600">|</span> MERN Stack</p></Reveal>
           <Reveal className="mt-6 space-y-5">
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-slate-600 dark:text-slate-400 sm:text-xs">{portfolio.fullName} <span className="px-1.5 text-cyan-700 dark:text-cyan-300">/</span> Full stack + IT operations</p>
-            <h1 className="max-w-3xl font-heading text-[2.7rem] font-semibold leading-[1.02] tracking-[-0.055em] text-slate-950 dark:text-white sm:text-6xl lg:text-[4.1rem] xl:text-[4.5rem]">Building <span className="hero-gradient-text">Powerful Digital Experiences</span></h1>
+            <h1 className="max-w-3xl font-heading text-[2.7rem] font-semibold leading-[1.02] tracking-[-0.055em] text-slate-950 dark:text-white sm:text-6xl lg:text-[3rem] xl:text-[4.1rem] 2xl:text-[4.5rem]">Building <span className="hero-gradient-text">Powerful Digital Experiences</span></h1>
             <p className="max-w-xl text-sm leading-7 text-slate-600 dark:text-slate-300 sm:text-base sm:leading-8">I&apos;m a Full-Stack Developer specializing in the MERN stack, building modern, responsive web applications from intuitive user interfaces to scalable backend systems. With experience in IT management, database integration, REST APIs, and technical problem-solving, I combine development expertise with practical IT operations.</p>
           </Reveal>
           <Reveal className="mt-7 flex flex-wrap gap-3">
@@ -134,7 +180,7 @@ export function HeroSection({ githubData }: { githubData: PortfolioGithubData })
           </Reveal>
         </div>
 
-        <Reveal className="w-full">
+        <Reveal className="w-full min-w-0">
           <div className="hero-workspace relative mx-auto min-h-[480px] max-w-[650px] sm:min-h-[570px] lg:min-h-[600px]">
             <div onPointerMove={trackPanelPointer} onPointerLeave={resetPanelPointer} className="hero-panel hero-editor absolute left-[3%] top-[4%] z-10 w-[88%] overflow-hidden rounded-2xl border border-white/[0.12] bg-[#0a1020]/90 shadow-[0_28px_90px_rgba(0,0,0,0.45)] backdrop-blur-xl sm:left-[5%] sm:top-[3%] sm:w-[78%]">
               <div className="flex h-11 items-center justify-between border-b border-white/[0.08] bg-white/[0.025] px-4"><div className="flex items-center gap-1.5" aria-hidden="true"><span className="size-2 rounded-full bg-rose-400/80" /><span className="size-2 rounded-full bg-amber-300/80" /><span className="size-2 rounded-full bg-emerald-300/80" /></div><div className="flex items-center gap-4 font-mono text-[9px] text-slate-500"><span className="text-cyan-100">project.controller.js</span><span className="hidden sm:inline">api.routes.js</span></div><span className="size-2 rounded-full bg-emerald-300 shadow-[0_0_10px_rgba(110,231,183,0.6)]" aria-label="Editor ready" /></div>
@@ -153,10 +199,10 @@ export function HeroSection({ githubData }: { githubData: PortfolioGithubData })
               <div className="flex items-start justify-between gap-2"><div><p className="mb-2 flex items-center gap-1.5 font-mono text-[8px] uppercase tracking-[0.14em] text-slate-500"><Github size={11} /> Featured repository</p><p className="truncate text-[11px] font-semibold text-white sm:text-sm">{featuredRepo?.name ?? "GitHub projects"}</p></div><ExternalLink size={13} className="mt-1 shrink-0 text-slate-500" /></div><p className="mt-2 line-clamp-2 text-[9px] leading-4 text-slate-400 sm:text-[10px]">{featuredRepoDescription}</p><div className="mt-3 flex items-center gap-2 border-t border-white/[0.08] pt-2.5 font-mono text-[8px] text-slate-500"><span className="size-1.5 rounded-full bg-cyan-300" />{featuredRepo?.primaryLanguage ?? "JavaScript"}<span className="ml-auto">GitHub <ArrowRight size={10} className="ml-1 inline" /></span></div>
             </a>
             <div onPointerMove={trackPanelPointer} onPointerLeave={resetPanelPointer} className="hero-panel hero-role absolute -right-1 top-[4%] z-20 hidden w-[43%] rounded-xl border border-sky-200/[0.16] bg-[#101526]/95 p-3 text-[9px] text-slate-300 shadow-xl backdrop-blur-xl sm:block sm:right-0 sm:top-[1%]"><p className="mb-2 flex items-center gap-1.5 font-mono uppercase tracking-[0.12em] text-sky-200"><SiReact size={12} /> React component</p><div className="grid min-h-[6.5em] grid-cols-[1.5rem_1fr] gap-2 font-mono leading-[1.3]"><LiveCode code={liveReactCode} lineCount={5} /></div></div>
-            <div className="hero-tech-icon hero-tech-react absolute left-[53%] top-[42%] z-30 hidden size-10 items-center justify-center rounded-2xl border border-sky-200/20 bg-[#101b2a]/90 text-sky-200 shadow-[0_12px_34px_rgba(0,0,0,0.35)] sm:flex"><SiReact size={20} /></div>
-            <div className="hero-tech-icon hero-tech-node absolute bottom-[31%] right-[2%] z-30 hidden size-10 items-center justify-center rounded-2xl border border-emerald-200/20 bg-[#101b2a]/90 text-emerald-200 shadow-[0_12px_34px_rgba(0,0,0,0.35)] sm:flex"><SiNodedotjs size={19} /></div>
-            <div className="hero-tech-icon hero-tech-mongo absolute bottom-[25%] left-[49%] z-30 hidden size-9 items-center justify-center rounded-xl border border-violet-200/20 bg-[#151326]/90 text-violet-200 shadow-[0_12px_34px_rgba(0,0,0,0.35)] sm:flex"><SiMongodb size={17} /></div>
-            <div className="hero-tech-icon hero-tech-express absolute right-[13%] top-[62%] z-30 hidden size-8 items-center justify-center rounded-xl border border-white/10 bg-[#141624]/90 text-white shadow-[0_12px_34px_rgba(0,0,0,0.35)] sm:flex"><SiExpress size={15} /></div>
+            <button type="button" aria-label="Move React icon to a random position" title="Click to move" onClick={(event) => moveTechIcon("react", event)} style={getTechIconStyle("react", "#61dafb")} className="hero-tech-icon hero-tech-react absolute z-40 hidden size-10 cursor-pointer items-center justify-center rounded-2xl border bg-[#101b2a]/90 text-sky-200 shadow-[0_12px_34px_rgba(0,0,0,0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 sm:flex"><SiReact size={20} aria-hidden="true" /></button>
+            <button type="button" aria-label="Move Node.js icon to a random position" title="Click to move" onClick={(event) => moveTechIcon("node", event)} style={getTechIconStyle("node", "#68a063")} className="hero-tech-icon hero-tech-node absolute z-40 hidden size-10 cursor-pointer items-center justify-center rounded-2xl border bg-[#101b2a]/90 text-emerald-200 shadow-[0_12px_34px_rgba(0,0,0,0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 sm:flex"><SiNodedotjs size={19} aria-hidden="true" /></button>
+            <button type="button" aria-label="Move MongoDB icon to a random position" title="Click to move" onClick={(event) => moveTechIcon("mongo", event)} style={getTechIconStyle("mongo", "#13aa52")} className="hero-tech-icon hero-tech-mongo absolute z-40 hidden size-10 cursor-pointer items-center justify-center rounded-xl border bg-[#151326]/90 text-[#13aa52] shadow-[0_12px_34px_rgba(0,0,0,0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 sm:flex"><SiMongodb size={17} aria-hidden="true" /></button>
+            <button type="button" aria-label="Move Express icon to a random position" title="Click to move" onClick={(event) => moveTechIcon("express", event)} style={getTechIconStyle("express", "#a1a1aa")} className="hero-tech-icon hero-tech-express absolute z-40 hidden size-10 cursor-pointer items-center justify-center rounded-xl border bg-[#141624]/90 text-white shadow-[0_12px_34px_rgba(0,0,0,0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300 sm:flex"><SiExpress size={18} aria-hidden="true" /></button>
           </div>
         </Reveal>
       </div>
@@ -164,6 +210,7 @@ export function HeroSection({ githubData }: { githubData: PortfolioGithubData })
   );
 }
 export function AboutSection({ avatarUrl }: { avatarUrl: string }) {
+  const [showPortraitPlaceholder, setShowPortraitPlaceholder] = useState(false);
   const trackPortraitPointer = (event: ReactPointerEvent<HTMLDivElement>) => {
     if (event.pointerType === "touch") return;
     const bounds = event.currentTarget.getBoundingClientRect();
@@ -183,9 +230,24 @@ export function AboutSection({ avatarUrl }: { avatarUrl: string }) {
         <Reveal>
           <div className="max-w-sm">
             <div onPointerMove={trackPortraitPointer} onPointerLeave={resetPortraitPointer} className="about-portrait relative aspect-square overflow-hidden rounded-2xl bg-muted">
-              <Image src={avatarUrl} alt={`${portfolio.fullName} portrait`} fill sizes="(max-width: 768px) 320px, 420px" className="object-cover object-center grayscale-[18%]" />
+              <button
+                type="button"
+                className={`portrait-flip-button ${showPortraitPlaceholder ? "is-flipped" : ""}`}
+                aria-label={showPortraitPlaceholder ? "Show Naruto artwork" : "Show your portrait"}
+                aria-pressed={showPortraitPlaceholder}
+                onClick={() => setShowPortraitPlaceholder((current) => !current)}
+              >
+                <span className="portrait-flip-inner">
+                  <span className="portrait-flip-face portrait-flip-front" aria-hidden={showPortraitPlaceholder}>
+                    <Image src={avatarUrl} alt={`${portfolio.fullName} portrait`} fill sizes="(max-width: 768px) 320px, 420px" className="object-cover object-center grayscale-[18%]" />
+                  </span>
+                  <span className="portrait-flip-face portrait-flip-back" aria-hidden={!showPortraitPlaceholder}>
+                    <Image src="/portrait.jpg" alt={`${portfolio.fullName}, portrait`} fill sizes="(max-width: 768px) 320px, 420px" className="object-cover object-center" />
+                  </span>
+                </span>
+              </button>
             </div>
-            <div className="mt-4 flex items-center justify-between border-b border-border pb-3">
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-b border-border pb-3">
               <p className="font-heading text-sm font-semibold text-foreground">{portfolio.fullName}</p>
               <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-primary">Full Stack / MERN</p>
             </div>
@@ -199,7 +261,7 @@ export function AboutSection({ avatarUrl }: { avatarUrl: string }) {
             <h2 className="mt-5 max-w-2xl font-heading text-3xl font-medium leading-tight tracking-[-0.04em] text-foreground sm:text-5xl">From the first click to the last query.</h2>
             <p className="mt-6 max-w-2xl text-base leading-8 text-muted-foreground">{portfolio.shortBio} {portfolio.about}</p>
 
-            <Button asChild variant="outline" className="mt-6 rounded-full px-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/50 hover:bg-primary/10 hover:text-primary hover:shadow-[0_8px_24px_rgba(34,211,238,0.16)]">
+            <Button asChild variant="outline" className="mt-6 h-11 rounded-full px-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/50 hover:bg-primary/10 hover:text-primary hover:shadow-[0_8px_24px_rgba(34,211,238,0.16)]">
               <a href={portfolio.resumePath} download>
                 <Download size={16} /> Download CV
               </a>
@@ -225,11 +287,12 @@ export function SkillsSection() {
   const rows = [
     { title: "Frontend", note: "Interfaces and product experience", skills: ["React", "Next.js", "JavaScript", "TypeScript", "HTML", "CSS", "Tailwind CSS"] },
     { title: "Backend & data", note: "Application logic and persistence", skills: ["Node.js", "Express.js", "MongoDB"] },
+    { title: "Languages & tools", note: "Programming, design, and development workflow", skills: ["C++", "Motion", "Canva", "Adobe Photoshop", "Git", "VS Code", "Vite"] },
   ];
 
   return (
-    <section id="skills" className="section-shell">
-      <div className="space-y-10">
+    <section id="skills" className="section-shell skills-section">
+      <div className="skills-section-content space-y-10">
         <Reveal>
           <SectionHeading
             eyebrow="Skills"
@@ -238,14 +301,14 @@ export function SkillsSection() {
           />
         </Reveal>
 
-        <div className="space-y-8">
+        <div className="skills-row-list space-y-8">
           {rows.map((row, rowIndex) => (
-            <div key={row.title} className="space-y-3">
+            <div key={row.title} className="skills-row space-y-3">
               <div className="flex items-end justify-between gap-4 border-b border-border pb-3">
                 <div><h3 className="font-heading text-lg font-semibold tracking-tight text-foreground">{row.title}</h3><p className="mt-1 text-sm text-muted-foreground">{row.note}</p></div>
-                <span className="hidden font-mono text-[9px] uppercase tracking-[0.15em] text-muted-foreground sm:block">{rowIndex === 0 ? "01 / Client" : "02 / Server"}</span>
+                <span className="hidden font-mono text-[9px] uppercase tracking-[0.15em] text-muted-foreground sm:block">{rowIndex === 0 ? "01 / Client" : rowIndex === 1 ? "02 / Server" : "03 / Tools"}</span>
               </div>
-              <div className="skill-marquee rounded-2xl py-1">
+              <div className="skill-marquee rounded-2xl py-1" role="region" aria-label={`${row.title} skills`} tabIndex={0}>
                 <div className={`skill-marquee-track gap-0 ${rowIndex % 2 ? "skill-marquee-track-reverse" : ""}`}>
                   {[0, 1, 2, 3].map((copy) => (
                     <div key={copy} aria-hidden={copy > 0} className="flex shrink-0 gap-3 pr-3">
@@ -255,7 +318,7 @@ export function SkillsSection() {
                         const skillMeta = skillIcons[skill.icon];
                         const SkillIcon = skillMeta.icon;
                         return (
-                          <div key={skill.name} title={skill.name} style={{ "--skill-border-hover": skillMeta.accent, "--skill-surface-hover": `color-mix(in srgb, ${skillMeta.accent} 12%, var(--card))`, "--skill-glow": `color-mix(in srgb, ${skillMeta.accent} 18%, transparent)` } as CSSProperties & { "--skill-border-hover": string; "--skill-surface-hover": string; "--skill-glow": string }} className={`group flex min-w-[10.5rem] items-center gap-3 rounded-2xl border border-border bg-card/80 px-4 py-3.5 text-foreground shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg ${skillMeta.hover}`}>
+                          <div key={skill.name} style={{ "--skill-border-hover": skillMeta.accent, "--skill-surface-hover": `color-mix(in srgb, ${skillMeta.accent} 12%, var(--card))`, "--skill-glow": `color-mix(in srgb, ${skillMeta.accent} 18%, transparent)` } as CSSProperties & { "--skill-border-hover": string; "--skill-surface-hover": string; "--skill-glow": string }} className={`group flex min-w-[10.5rem] items-center gap-3 rounded-2xl border border-border bg-card/80 px-4 py-3.5 text-foreground shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg ${skillMeta.hover}`}>
                             <span className={`skill-icon flex size-11 shrink-0 items-center justify-center rounded-xl border transition-colors ${skillMeta.surface}`}><SkillIcon className={`${skill.icon === "javascript" ? "size-7" : "size-6"} transition-colors ${skillMeta.color}`} aria-hidden="true" /></span>
                             <span className="font-heading text-sm font-semibold tracking-tight">{skill.name}</span>
                           </div>

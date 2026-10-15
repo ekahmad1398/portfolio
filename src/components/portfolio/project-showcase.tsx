@@ -26,6 +26,10 @@ function formatDate(value: string) {
   }).format(new Date(value));
 }
 
+function formatProjectName(name: string) {
+  return name ? `${name[0].toLocaleUpperCase()}${name.slice(1)}` : name;
+}
+
 const projectAccents = ["#38bdf8", "#a78bfa", "#34d399", "#fb923c", "#f472b6", "#facc15"];
 
 function LiveLabel() {
@@ -69,12 +73,12 @@ function RepoCard({ repo, index, featured = false }: { repo: GithubRepoCard; ind
         {repo.homepage ? <span className="rounded-full border border-emerald-500/20 bg-emerald-500/[0.07] px-2.5 py-1 font-mono text-[9px] text-emerald-700 dark:text-emerald-300">{isRumiSchool ? "Education website" : <LiveLabel />}</span> : null}
       </div>
       <div className="mt-5 pl-2">
-        <h3 className={`font-heading font-semibold tracking-tight text-foreground transition-colors group-hover:text-[color:var(--project-accent)] ${featured ? "text-2xl sm:text-3xl" : "text-lg"}`}>{isRumiSchool ? "Rumi International School" : repo.name}</h3>
+        <h3 className={`[overflow-wrap:anywhere] font-heading font-semibold tracking-tight text-foreground transition-colors group-hover:text-[color:var(--project-accent)] ${featured ? "text-2xl sm:text-3xl" : "text-lg"}`}>{isRumiSchool ? "Rumi International School" : formatProjectName(repo.name)}</h3>
         <p className={`mt-3 max-w-2xl text-sm leading-6 text-muted-foreground ${featured ? "line-clamp-4 sm:text-base sm:leading-7" : "line-clamp-3"}`}>{description}</p>
       </div>
       <div className="mt-auto flex flex-wrap items-center gap-2 border-t border-border/70 pt-5 mt-6 pl-2">
-        {repo.homepage ? <Button asChild size="sm" className="project-action h-9 rounded-full bg-primary px-4 text-xs text-primary-foreground hover:bg-primary/90"><a href={repo.homepage} target="_blank" rel="noreferrer">Visit project <ArrowUpRight size={13} /></a></Button> : null}
-        <a href={repo.url} target="_blank" rel="noreferrer" className="project-action inline-flex h-9 items-center gap-2 rounded-full border border-border px-4 text-xs font-medium text-foreground transition hover:border-[color:var(--project-accent)] hover:bg-muted/50"><Github size={14} /> Source code</a>
+        {repo.homepage ? <Button asChild size="sm" className="project-action h-11 rounded-full bg-primary px-4 text-xs text-primary-foreground hover:bg-primary/90"><a href={repo.homepage} target="_blank" rel="noreferrer">Visit project <ArrowUpRight size={13} /></a></Button> : null}
+        <a href={repo.url} target="_blank" rel="noreferrer" className="project-action inline-flex h-11 items-center gap-2 rounded-full border border-border px-4 text-xs font-medium text-foreground transition hover:border-[color:var(--project-accent)] hover:bg-muted/50"><Github size={14} /> Source code</a>
       </div>
     </article>
   );
@@ -143,7 +147,7 @@ export function GithubProjectsSection({ repos, activity }: GithubProjectsSection
               <button
                 key={filter}
                 type="button"
-                className={`rounded-md border px-3 py-2 text-[10px] font-mono uppercase tracking-[0.14em] transition ${
+                className={`min-h-11 rounded-md border px-3 py-2 text-[10px] font-mono uppercase tracking-[0.14em] transition ${
                   activeFilter === filter
                     ? "border-primary/30 bg-primary/10 text-primary"
                     : "border-border bg-transparent text-muted-foreground hover:border-primary/30 hover:text-foreground"

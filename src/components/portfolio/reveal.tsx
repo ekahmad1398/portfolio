@@ -21,8 +21,8 @@ export function Reveal({
     document.documentElement.classList.add("js-ready");
     const element = elementRef.current;
     if (!element || !("IntersectionObserver" in window)) {
-      setVisible(true);
-      return;
+      const frame = window.requestAnimationFrame(() => setVisible(true));
+      return () => window.cancelAnimationFrame(frame);
     }
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {

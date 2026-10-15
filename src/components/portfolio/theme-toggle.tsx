@@ -13,7 +13,7 @@ export function ThemeToggle() {
   );
 
   if (!mounted) {
-    return <span className="flex size-10 rounded-full border border-border bg-muted" aria-hidden="true" />;
+    return <span className="flex size-11 rounded-full border border-border bg-muted" aria-hidden="true" />;
   }
 
   const isDark = resolvedTheme !== "light";
@@ -21,7 +21,7 @@ export function ThemeToggle() {
   return (
     <button
       type="button"
-      className="flex size-10 items-center justify-center rounded-full border border-border bg-muted text-foreground transition-all duration-200 hover:-translate-y-0.5 hover:border-primary hover:bg-primary hover:text-primary-foreground hover:shadow-md hover:shadow-primary/25"
+      className="flex size-11 items-center justify-center rounded-full border border-border bg-muted text-foreground transition-all duration-200 hover:-translate-y-0.5 hover:border-primary hover:bg-primary hover:text-primary-foreground hover:shadow-md hover:shadow-primary/25"
       aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
       title={isDark ? "Switch to light theme" : "Switch to dark theme"}
       onClick={() => setTheme(isDark ? "light" : "dark")}
