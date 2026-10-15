@@ -1,9 +1,11 @@
 "use client";
 
-import { ExternalLink, Github, Sparkles, Star } from "lucide-react";
+import { ArrowUpRight, Github } from "lucide-react";
 import { useState } from "react";
+import type { CSSProperties } from "react";
 
 import type { GithubActivityItem, GithubRepoCard } from "@/lib/github";
+import { Button } from "@/components/ui/button";
 
 import { Reveal } from "./reveal";
 import { SectionHeading } from "./section-heading";
@@ -24,93 +26,35 @@ function formatDate(value: string) {
   }).format(new Date(value));
 }
 
-function RepoCard({
-  repo,
-  compact = false,
-}: {
-  repo: GithubRepoCard;
-  compact?: boolean;
-}) {
-  const hostLabel = repo.deploymentHost
-    ? repo.deploymentHost.includes("vercel")
-      ? "Live on Vercel"
-      : `Live on ${repo.deploymentHost}`
-    : "GitHub Project";
+const projectAccents = ["#38bdf8", "#a78bfa", "#34d399", "#fb923c", "#f472b6", "#facc15"];
+
+function RepoCard({ repo, index, featured = false }: { repo: GithubRepoCard; index: number; featured?: boolean }) {
+  const accent = projectAccents[index % projectAccents.length];
+  const isRumiSchool = repo.name.toLowerCase() === "rumiint";
+  const isMultiVendorStore = repo.name.toLowerCase().includes("multi-vendor-ecommerce");
+  const description = isRumiSchool
+    ? "Official website for Rumi International School."
+    : isMultiVendorStore
+      ? "A multi-vendor marketplace bringing products from multiple sellers together in one place."
+      : repo.description || "A project from my public GitHub portfolio.";
 
   return (
     <article
-      className={`surface-card interactive-lift flex h-full flex-col ${
-        compact ? "rounded-[1.4rem] p-4" : "rounded-[1.6rem] p-5"
-      }`}
+      style={{ "--project-accent": accent, "--project-tint": `color-mix(in srgb, ${accent} 7%, var(--card))` } as CSSProperties & { "--project-accent": string; "--project-tint": string }}
+      className={`project-card group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card p-5 transition duration-300 sm:p-6 ${featured ? "min-h-[17rem] sm:p-8" : ""}`}
     >
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <span className="inline-flex items-center gap-2 rounded-full border border-[color:var(--border-strong)] bg-[color:var(--surface-faint)] px-3 py-1.5 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-[color:var(--accent-strong)]">
-            <Sparkles size={12} />
-            {repo.primaryLanguage}
-          </span>
-          <h3 className="mt-4 truncate text-xl font-semibold tracking-tight text-[color:var(--text-main)]">
-            {repo.name}
-          </h3>
-        </div>
-
-        <div className="chip-soft rounded-2xl px-3 py-2 text-right">
-          <p className="text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-[color:var(--text-soft)]">
-            Updated
-          </p>
-          <p className="mt-1 text-xs font-medium text-[color:var(--text-main)]">
-            {formatDate(repo.updatedAt)}
-          </p>
-        </div>
+      <div aria-hidden="true" className="absolute inset-y-0 left-0 w-1 bg-[color:var(--project-accent)] opacity-50 transition-opacity group-hover:opacity-100" />
+      <div className="flex items-center justify-between gap-3 pl-2">
+        <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">{featured ? "Featured project" : `Project ${String(index + 1).padStart(2, "0")}`}</span>
+        {repo.homepage ? <span className="rounded-full border border-emerald-500/20 bg-emerald-500/[0.07] px-2.5 py-1 font-mono text-[9px] text-emerald-700 dark:text-emerald-300">{isRumiSchool ? "Education website" : "Live"}</span> : null}
       </div>
-
-      <p className="mt-4 line-clamp-3 text-sm leading-7 text-[color:var(--text-muted)]">
-        {repo.description}
-      </p>
-
-      <div className="mt-4 flex flex-wrap gap-2">
-        <span className="chip-soft rounded-full px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-[color:var(--text-main)]">
-          {hostLabel}
-        </span>
-        {repo.languages.slice(0, compact ? 2 : 3).map((language) => (
-          <span
-            key={language}
-            className="chip-soft rounded-full px-3 py-1 text-[0.68rem] font-medium uppercase tracking-[0.14em] text-[color:var(--text-muted)]"
-          >
-            {language}
-          </span>
-        ))}
+      <div className="mt-5 pl-2">
+        <h3 className={`font-heading font-semibold tracking-tight text-foreground transition-colors group-hover:text-[color:var(--project-accent)] ${featured ? "text-2xl sm:text-3xl" : "text-lg"}`}>{isRumiSchool ? "Rumi International School" : repo.name}</h3>
+        <p className={`mt-3 max-w-2xl text-sm leading-6 text-muted-foreground ${featured ? "line-clamp-4 sm:text-base sm:leading-7" : "line-clamp-3"}`}>{description}</p>
       </div>
-
-      <div className="mt-auto flex flex-wrap items-center justify-between gap-4 pt-6">
-        <div className="flex items-center gap-2 text-sm font-medium text-[color:var(--text-muted)]">
-          <Star size={15} className="fill-current text-sky-400" />
-          {repo.stars} stars
-        </div>
-
-        <div className="flex flex-wrap items-center gap-2">
-          {repo.homepage ? (
-            <a
-              href={repo.homepage}
-              target="_blank"
-              rel="noreferrer"
-              className="primary-button px-4 py-2.5 text-[0.7rem]"
-            >
-              <ExternalLink size={14} />
-              Live
-            </a>
-          ) : null}
-
-          <a
-            href={repo.url}
-            target="_blank"
-            rel="noreferrer"
-            className="secondary-button px-4 py-2.5 text-[0.7rem]"
-          >
-            <Github size={14} />
-            Code
-          </a>
-        </div>
+      <div className="mt-auto flex flex-wrap items-center gap-2 border-t border-border/70 pt-5 mt-6 pl-2">
+        {repo.homepage ? <Button asChild size="sm" className="h-9 rounded-full bg-primary px-4 text-xs text-primary-foreground hover:bg-primary/90"><a href={repo.homepage} target="_blank" rel="noreferrer">Visit project <ArrowUpRight size={13} /></a></Button> : null}
+        <a href={repo.url} target="_blank" rel="noreferrer" className="inline-flex h-9 items-center gap-2 rounded-full border border-border px-4 text-xs font-medium text-foreground transition hover:border-[color:var(--project-accent)] hover:bg-muted/50"><Github size={14} /> Source code</a>
       </div>
     </article>
   );
@@ -122,19 +66,14 @@ export function FeaturedProjectsSection({ repos }: FeaturedProjectsSectionProps)
       <div className="space-y-8">
         <Reveal>
           <SectionHeading
-            eyebrow="Live Projects"
-            title="Some of my GitHub projects that are already deployed online."
-            description="These cards come from my public GitHub repositories and show the projects that have a live homepage, including the ones hosted on Vercel."
+            eyebrow="Selected work"
+            title="Projects built from idea to launch."
+            description="A selection of products and experiments, with a live link where one is available."
           />
         </Reveal>
 
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {repos.map((repo) => (
-            <Reveal key={repo.id}>
-              <RepoCard repo={repo} compact />
-            </Reveal>
-          ))}
-        </div>
+        {repos[0] ? <Reveal><RepoCard repo={repos[0]} index={0} featured /></Reveal> : null}
+        {repos.length > 1 ? <div className="grid gap-4 pt-1 md:grid-cols-2 xl:gap-5">{repos.slice(1).map((repo, index) => <Reveal key={repo.id}><RepoCard repo={repo} index={index + 1} /></Reveal>)}</div> : null}
       </div>
     </section>
   );
@@ -164,9 +103,9 @@ export function GithubProjectsSection({ repos, activity }: GithubProjectsSection
 
         {activity.length ? (
           <Reveal>
-            <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+            <div className="grid gap-x-6 sm:grid-cols-2 xl:grid-cols-4">
               {activity.map((item) => (
-                <div key={item.id} className="glass-card rounded-[1.35rem] p-4">
+                <div key={item.id} className="border-t border-border py-4">
                   <p className="text-sm font-semibold text-[color:var(--text-main)]">{item.title}</p>
                   <p className="mt-1 text-sm text-[color:var(--text-muted)]">{item.repoName}</p>
                   <p className="mt-3 text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--accent-strong)]">
@@ -184,10 +123,10 @@ export function GithubProjectsSection({ repos, activity }: GithubProjectsSection
               <button
                 key={filter}
                 type="button"
-                className={`rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] transition ${
+                className={`rounded-md border px-3 py-2 text-[10px] font-mono uppercase tracking-[0.14em] transition ${
                   activeFilter === filter
-                    ? "border-sky-300/40 bg-sky-100 text-sky-700 shadow-[0_10px_24px_rgba(56,189,248,0.12)] dark:bg-sky-400/14 dark:text-sky-100"
-                    : "border-[color:var(--border-soft)] bg-[color:var(--chip-bg)] text-[color:var(--text-muted)] hover:border-[color:var(--border-strong)] hover:bg-[color:var(--surface-soft)] dark:bg-white/5"
+                    ? "border-primary/30 bg-primary/10 text-primary"
+                    : "border-border bg-transparent text-muted-foreground hover:border-primary/30 hover:text-foreground"
                 }`}
                 onClick={() => setActiveFilter(filter)}
               >
@@ -197,16 +136,16 @@ export function GithubProjectsSection({ repos, activity }: GithubProjectsSection
           </div>
         </Reveal>
 
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
           {filteredRepos.length ? (
-            filteredRepos.slice(0, 6).map((repo) => (
+            filteredRepos.slice(0, 6).map((repo, index) => (
               <Reveal key={repo.id}>
-                <RepoCard repo={repo} compact />
+                <RepoCard repo={repo} index={index} />
               </Reveal>
             ))
           ) : (
             <Reveal>
-              <div className="glass-card p-6 text-sm leading-7 text-[color:var(--text-muted)] md:col-span-2 xl:col-span-3">
+              <div className="border-t border-border py-8 text-sm leading-7 text-muted-foreground">
                 No repositories matched this filter right now. Try another technology tag.
               </div>
             </Reveal>

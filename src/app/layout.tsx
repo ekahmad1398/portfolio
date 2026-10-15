@@ -1,26 +1,19 @@
 import type { Metadata, Viewport } from "next";
-import { IBM_Plex_Mono, Plus_Jakarta_Sans, Sora } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 
-import { PageLoader } from "@/components/portfolio/page-loader";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { portfolio } from "@/data/portfolio";
 import { getSiteUrl, getSiteUrlObject } from "@/lib/site-url";
 
 import "./globals.css";
 
-const plusJakartaSans = Plus_Jakarta_Sans({
-  variable: "--font-plus-jakarta",
+const geist = Geist({
+  variable: "--font-geist",
   subsets: ["latin"],
 });
 
-const sora = Sora({
-  variable: "--font-sora",
-  subsets: ["latin"],
-});
-
-const ibmPlexMono = IBM_Plex_Mono({
-  variable: "--font-ibm-plex-mono",
-  weight: ["400", "500", "600", "700"],
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
@@ -28,8 +21,8 @@ const siteUrl = getSiteUrl();
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f8fbff" },
-    { media: "(prefers-color-scheme: dark)", color: "#08111f" },
+    { media: "(prefers-color-scheme: light)", color: "#f5f3f8" },
+    { media: "(prefers-color-scheme: dark)", color: "#0d0b13" },
   ],
   colorScheme: "light dark",
 };
@@ -41,10 +34,10 @@ export const metadata: Metadata = {
     template: `%s | ${portfolio.fullName}`,
   },
   description:
-    "Frontend developer portfolio for Ahmad Shah Gouhari with clean layouts, human-centered copy, and polished React and Next.js UI.",
+    "Full stack developer portfolio for Ahmad Shah Gouhari, showcasing MERN applications, React interfaces, Node.js APIs, and MongoDB.",
   keywords: [
     "Ahmad Shah Gouhari",
-    "Frontend Developer",
+    "Full Stack Developer",
     "React Portfolio",
     "Next.js Portfolio",
     "JavaScript Developer",
@@ -59,7 +52,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: `${portfolio.fullName} | ${portfolio.role}`,
     description:
-      "Modern frontend portfolio with GitHub-powered projects, deployed work, and a cleaner light and dark experience.",
+      "Full stack portfolio featuring MERN development, deployed projects, and end-to-end web applications.",
     url: siteUrl,
     siteName: `${portfolio.fullName} Portfolio`,
     images: [
@@ -77,7 +70,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${portfolio.fullName} | ${portfolio.role}`,
     description:
-      "Modern frontend portfolio with GitHub-powered projects, deployed work, and a cleaner light and dark experience.",
+      "Full stack portfolio featuring MERN development, deployed projects, and end-to-end web applications.",
     images: ["/opengraph-image"],
   },
   alternates: {
@@ -94,11 +87,10 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${plusJakartaSans.variable} ${sora.variable} ${ibmPlexMono.variable}`}
+      className={`${geist.variable} ${geistMono.variable}`}
     >
       <body>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
-          <PageLoader label="Opening the portfolio" />
           {children}
         </ThemeProvider>
       </body>

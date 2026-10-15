@@ -11,8 +11,9 @@ export type SocialLink = {
 export type SkillCard = {
   name: string;
   description: string;
+  category: string;
   proficiency: number;
-  icon: "html" | "css" | "javascript" | "react" | "next" | "tailwind" | "github";
+  icon: "html" | "css" | "javascript" | "typescript" | "react" | "next" | "tailwind" | "github" | "mongodb" | "express" | "node";
 };
 
 export type ServiceCard = {
@@ -29,14 +30,14 @@ export type JourneyItem = {
 export const portfolio = {
   displayName: "Ahmad Shah",
   fullName: "Ahmad Shah Gouhari",
-  role: "Frontend Developer",
-  heroTitle: "I build clean websites that feel modern, easy to use, and ready for real people.",
+  role: "Full Stack Developer",
+  heroTitle: "Ideas made into digital products.",
   heroDescription:
-    "I focus on frontend work with HTML, CSS, JavaScript, React, and Next.js. I enjoy taking a simple idea and turning it into a website that feels clear, responsive, and pleasant to use.",
+    "I build end-to-end web applications with MongoDB, Express, React, and Node.js, connecting polished interfaces to reliable backend systems.",
   shortBio:
-    "I am a frontend developer who likes building websites that feel clean, friendly, and reliable on both desktop and mobile.",
+    "My work spans the MERN stack, with the interface, API, and data layer designed as parts of one product.",
   about:
-    "I started this portfolio as a simple place to show my work, but over time I wanted it to represent me better. Now I use it to share projects in a clearer way and show how I think about layout, detail, and usability.",
+    "I start with what a product needs to do, then shape its interface, define the API, and connect the data flow that makes it work in practice.",
   personalInterests:
     "Outside coding, I enjoy games, movies, and noticing small design details that make websites feel more human and memorable.",
   githubUsername: "ekahmad1398",
@@ -56,86 +57,46 @@ export const portfolio = {
     { id: "about", label: "About" },
     { id: "skills", label: "Skills" },
     { id: "projects", label: "Projects" },
+    { id: "experience", label: "Experience" },
     { id: "contact", label: "Contact" },
   ] satisfies SectionLink[],
   strengths: [
-    "Responsive layouts that stay clean on every screen",
-    "React and Next.js pages with clear structure",
-    "Tailwind styling with organized spacing and rhythm",
-    "Interfaces that feel calm, readable, and intentional",
-    "Thoughtful details that help a website feel finished",
-    "Frontend work prepared for real deployment",
+    "Full stack applications from UI to database",
+    "React interfaces with reusable components",
+    "Node.js and Express REST APIs",
+    "MongoDB data models and persistence",
+    "Authentication, validation, and error handling",
+    "Responsive products ready for deployment",
   ],
   skills: [
-    {
-      name: "HTML5",
-      description: "Semantic page structure and clean content foundations for modern interfaces.",
-      proficiency: 95,
-      icon: "html",
-    },
-    {
-      name: "CSS3",
-      description: "Responsive layout systems, visual rhythm, and precise styling details.",
-      proficiency: 92,
-      icon: "css",
-    },
-    {
-      name: "JavaScript",
-      description: "Interactive behavior, reusable logic, and richer user-facing frontend features.",
-      proficiency: 88,
-      icon: "javascript",
-    },
-    {
-      name: "React",
-      description: "Component-driven UI development with scalable, reusable interface patterns.",
-      proficiency: 90,
-      icon: "react",
-    },
-    {
-      name: "Next.js",
-      description: "App Router structure, deployment-ready pages, and modern React workflows.",
-      proficiency: 84,
-      icon: "next",
-    },
-    {
-      name: "Tailwind CSS",
-      description: "Fast styling systems for expressive interfaces with clean responsive behavior.",
-      proficiency: 91,
-      icon: "tailwind",
-    },
-    {
-      name: "GitHub",
-      description: "Code publishing, version control, and public project presentation.",
-      proficiency: 82,
-      icon: "github",
-    },
+    { name: "MongoDB", category: "01 / DATA", description: "Document database design, data modeling, and persistence for real application workflows.", proficiency: 82, icon: "mongodb" },
+    { name: "Express.js", category: "02 / API", description: "REST endpoints, middleware, validation, and clear server-side routing.", proficiency: 80, icon: "express" },
+    { name: "React", category: "03 / INTERFACE", description: "Reusable components and interactive interfaces built around real product needs.", proficiency: 90, icon: "react" },
+    { name: "Node.js", category: "04 / RUNTIME", description: "JavaScript runtime for API development, application logic, and integrations.", proficiency: 82, icon: "node" },
+    { name: "JavaScript", category: "LANGUAGE", description: "Modern JavaScript across the browser and server, with practical reusable patterns.", proficiency: 88, icon: "javascript" },
+    { name: "TypeScript", category: "LANGUAGE", description: "Typed application code used across full-stack projects and the personal portfolio.", proficiency: 84, icon: "typescript" },
+    { name: "HTML", category: "FOUNDATION", description: "Semantic page structure for accessible, well-organized web experiences.", proficiency: 86, icon: "html" },
+    { name: "CSS", category: "STYLING", description: "Responsive layouts, visual styling, and polished interface details.", proficiency: 86, icon: "css" },
+    { name: "Next.js", category: "FRAMEWORK", description: "Production-ready React applications, routing, rendering, and deployment workflows.", proficiency: 84, icon: "next" },
+    { name: "Tailwind CSS", category: "STYLING", description: "Responsive interfaces with consistent spacing, typography, and visual detail.", proficiency: 91, icon: "tailwind" },
+    { name: "Git & GitHub", category: "WORKFLOW", description: "Version control, collaboration, and maintaining a clear project history.", proficiency: 82, icon: "github" },
   ] satisfies SkillCard[],
-  techStack: [
-    "HTML",
-    "CSS",
-    "JavaScript",
-    "React",
-    "Next.js",
-    "Tailwind CSS",
-    "Responsive Design",
-    "Accessibility",
-    "Vercel",
-  ],
+  techStack: ["MongoDB", "Express.js", "React", "Node.js", "JavaScript", "TypeScript", "HTML", "CSS", "Next.js", "Tailwind CSS", "REST APIs", "Git", "Vercel"],
   services: [
     {
-      title: "Frontend Development",
+      title: "Full Stack Development",
       description:
-        "Landing pages, portfolios, and modern websites built with a React and Next.js workflow.",
+        "End-to-end web applications with React interfaces, Express APIs, and MongoDB data.",
     },
     {
-      title: "UI Implementation",
+      title: "Backend & API Development",
       description:
-        "Design-to-code execution with attention to typography, visual fidelity, responsive behavior, and interaction polish.",
+        "REST API design, server-side logic, authentication, and database integration with Node.js and Express.",
     },
     {
-      title: "Portfolio and Brand Sites",
+      title: "Product UI & Integration",
       description:
-        "Personal brand and showcase websites that present projects clearly and feel premium across desktop and mobile.",
+        "Responsive React experiences connected to real data and built to feel fast, clear, and polished.",
     },
   ] satisfies ServiceCard[],
   journey: [
@@ -149,7 +110,7 @@ export const portfolio = {
       year: "2026",
       title: "Built and shipped portfolio work",
       description:
-        "Released personal web projects and iterated on a public portfolio presence with deployed frontend work.",
+        "Released personal web projects and grew a full stack development practice.",
     },
     {
       year: "2026",
@@ -159,7 +120,7 @@ export const portfolio = {
     },
   ] satisfies JourneyItem[],
   stats: [
-    { value: "7", label: "Core frontend skills" },
+    { value: "0", label: "Public repositories" },
     { value: "2023", label: "GitHub since" },
     { value: "Next.js", label: "Primary framework" },
   ],

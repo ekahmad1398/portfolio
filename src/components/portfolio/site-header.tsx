@@ -1,137 +1,93 @@
 "use client";
 
-import { Mail, Menu, X } from "lucide-react";
-import Link from "next/link";
-import { useTheme } from "next-themes";
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { ArrowRight, Menu, X } from "lucide-react";
+import { useEffect, useState } from "react";
 
+import { Button } from "@/components/ui/button";
 import type { SectionLink } from "@/data/portfolio";
 
 import { ThemeToggle } from "./theme-toggle";
 
 type SiteHeaderProps = {
-  name: string;
   sections: SectionLink[];
   email?: string;
 };
 
-export function SiteHeader({ name, sections, email }: SiteHeaderProps) {
+export function SiteHeader({ sections, email }: SiteHeaderProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const { resolvedTheme } = useTheme();
-  const mounted = useSyncExternalStore(
-    () => () => {},
-    () => true,
-    () => false
-  );
+  const [activeSection, setActiveSection] = useState("hero");
 
   useEffect(() => {
-    function handleScroll() {
-      setIsScrolled(window.scrollY > 12);
-    }
+    const targets = sections
+      .map((section) => document.getElementById(section.id))
+      .filter((section): section is HTMLElement => section !== null);
 
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((first, second) => second.intersectionRatio - first.intersectionRatio)[0];
+        if (visible) setActiveSection(visible.target.id);
+      },
+      { rootMargin: "-25% 0px -60% 0px", threshold: [0, 0.15, 0.4] }
+    );
 
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    targets.forEach((target) => observer.observe(target));
+    return () => observer.disconnect();
+  }, [sections]);
 
-  const isDarkTheme = mounted && resolvedTheme === "dark";
-
-  const shellClass = isDarkTheme
-    ? isScrolled
-      ? "border-white/10 bg-slate-950/84 shadow-[0_18px_38px_rgba(2,6,23,0.34)]"
-      : "border-white/8 bg-slate-950/66"
-    : isScrolled
-      ? "border-[color:var(--border-soft)] bg-[rgba(244,238,229,0.92)] shadow-[0_18px_38px_rgba(106,125,142,0.16)]"
-      : "border-[color:var(--border-soft)] bg-[rgba(240,247,251,0.84)]";
-
-  const brandEyebrowClass = isDarkTheme ? "text-sky-200/70" : "text-[color:var(--accent-strong)]";
-  const brandTextClass = isDarkTheme ? "text-white" : "text-[color:var(--text-main)]";
-  const navLinkClass = isDarkTheme
-    ? "relative px-2 py-2 text-sm font-medium text-slate-300 transition after:absolute after:bottom-0 after:left-2 after:h-px after:w-0 after:bg-sky-300 after:transition-all hover:text-white hover:after:w-[calc(100%-1rem)]"
-    : "relative px-2 py-2 text-sm font-medium text-[color:var(--text-muted)] transition after:absolute after:bottom-0 after:left-2 after:h-px after:w-0 after:bg-[color:var(--accent-strong)] after:transition-all hover:text-[color:var(--text-main)] hover:after:w-[calc(100%-1rem)]";
+  const navigation = (
+    <>
+      {sections.map((section) => {
+        const isActive = activeSection === section.id;
+        return (
+          <a
+            key={section.id}
+            href={`#${section.id}`}
+            aria-current={isActive ? "location" : undefined}
+            className={`nav-link relative rounded-md px-2.5 py-2.5 font-display text-[13px] font-medium transition-all duration-200 after:absolute after:inset-x-2.5 after:bottom-0.5 after:h-0.5 after:rounded-full after:bg-primary after:transition-transform hover:-translate-y-0.5 hover:bg-primary/10 hover:text-primary hover:after:scale-x-100 ${isActive ? "font-semibold text-primary after:scale-x-100" : "text-muted-foreground after:scale-x-0"}`}
+            onClick={() => setMobileOpen(false)}
+          >
+            {section.label}
+          </a>
+        );
+      })}
+    </>
+  );
 
   return (
-    <header className="sticky top-0 z-50 px-4 pt-4 sm:px-6 lg:px-8">
-      <div
-        className={`mx-auto flex w-full max-w-7xl items-center justify-between gap-6 rounded-[1.35rem] border px-4 py-3 backdrop-blur-xl transition-all duration-300 sm:px-5 ${shellClass}`}
-      >
-        <Link href="#hero" className="min-w-0 text-left">
-          <span
-            className={`block font-mono text-[0.62rem] font-semibold uppercase tracking-[0.28em] ${brandEyebrowClass}`}
-          >
-            Portfolio
-          </span>
-          <span
-            className={`mt-1 block truncate font-display text-lg font-semibold tracking-[-0.03em] ${brandTextClass}`}
-          >
-            {name}
-          </span>
-        </Link>
+    <header className="site-header sticky top-0 z-50 w-full border-b border-border/60 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex min-h-[4.5rem] w-full max-w-[90rem] items-center justify-between gap-4 py-2">
+          <nav className="hidden min-w-0 flex-1 items-center justify-start gap-5 pr-6 lg:flex xl:gap-8" aria-label="Primary navigation">{navigation}</nav>
 
-        <nav className="hidden items-center gap-6 lg:flex" aria-label="Primary">
-          {sections.map((section) => (
-            <a key={section.id} href={`#${section.id}`} className={navLinkClass}>
-              {section.label}
-            </a>
-          ))}
-        </nav>
-
-        <div className="hidden items-center gap-3 lg:flex">
-          <ThemeToggle />
-          {email ? (
-            <a href={`mailto:${email}`} className="secondary-button px-4 py-2.5">
-              <Mail size={16} />
-              Contact
-            </a>
-          ) : null}
-        </div>
-
-        <div className="flex items-center gap-2 lg:hidden">
-          <ThemeToggle />
-          <button
-            type="button"
-            className="icon-button"
-            aria-label={mobileOpen ? "Close menu" : "Open menu"}
-            aria-expanded={mobileOpen}
-            aria-controls="mobile-navigation"
-            onClick={() => setMobileOpen((current) => !current)}
-          >
-            {mobileOpen ? <X size={18} /> : <Menu size={18} />}
-          </button>
-        </div>
+          <div className="ml-auto flex shrink-0 items-center gap-3 sm:gap-4">
+            <span className="hidden lg:block"><ThemeToggle /></span>
+            {email ? (
+              <Button asChild className="hidden h-10 rounded-full bg-primary px-4 text-xs font-semibold tracking-[0.01em] text-primary-foreground shadow-sm transition hover:-translate-y-0.5 hover:bg-[#6d28d9] hover:shadow-lg hover:shadow-primary/25 sm:inline-flex">
+                <a href={`mailto:${email}`}>Contact <ArrowRight size={14} /></a>
+              </Button>
+            ) : null}
+            <div className="lg:hidden"><ThemeToggle /></div>
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              className="size-10 rounded-full border border-border bg-muted text-foreground transition hover:border-primary hover:bg-primary hover:text-primary-foreground hover:shadow-md hover:shadow-primary/25 lg:hidden"
+              aria-label={mobileOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileOpen}
+              aria-controls="mobile-navigation"
+              onClick={() => setMobileOpen((current) => !current)}
+            >
+              {mobileOpen ? <X size={18} /> : <Menu size={18} />}
+            </Button>
+          </div>
       </div>
 
       {mobileOpen ? (
-        <div className="mx-auto mt-3 w-full max-w-7xl px-4 sm:px-6 lg:hidden">
-          <div
-            id="mobile-navigation"
-            className="glass-card flex flex-col gap-1 rounded-[1.15rem] p-2.5"
-          >
-            {sections.map((section) => (
-              <a
-                key={section.id}
-                href={`#${section.id}`}
-                className="rounded-[0.9rem] px-4 py-3 text-sm font-medium text-[color:var(--text-main)] transition hover:bg-[color:var(--surface-faint)]"
-                onClick={() => setMobileOpen(false)}
-              >
-                {section.label}
-              </a>
-            ))}
-
-            {email ? (
-              <a
-                href={`mailto:${email}`}
-                className="secondary-button mt-1 rounded-[0.9rem] px-4 py-3"
-                onClick={() => setMobileOpen(false)}
-              >
-                <Mail size={16} />
-                Contact
-              </a>
-            ) : null}
-          </div>
-        </div>
+        <nav id="mobile-navigation" className="mx-auto mb-3 flex w-full flex-col border-t border-border/70 bg-background py-2 lg:hidden" aria-label="Mobile navigation">
+          {navigation}
+          {email ? <a className="mt-2 rounded-lg bg-primary px-4 py-3 text-center text-sm font-semibold text-primary-foreground transition hover:bg-[#6d28d9]" href={`mailto:${email}`} onClick={() => setMobileOpen(false)}>Let&apos;s Talk <ArrowRight className="ml-1 inline" size={15} /></a> : null}
+        </nav>
       ) : null}
     </header>
   );

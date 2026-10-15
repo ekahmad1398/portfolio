@@ -218,24 +218,37 @@ export async function getPortfolioGithubData(): Promise<PortfolioGithubData> {
       ),
     ]);
 
-    const repositories = await Promise.all(
-      repoResponse
-        .filter((repo) => !repo.fork && !repo.archived)
-        .map(async (repo) => {
-          const languagesMap = await fetchGithubJson<Record<string, number>>(
-            repo.languages_url
-          );
+    const repositories = repoResponse
+      .filter((repo) => !repo.fork && !repo.archived)
+      .map((repo) => normalizeRepo(repo, {}));
 
-          return normalizeRepo(repo, languagesMap);
+    // Keep secondary language metadata for likely featured projects, without
+    // blocking the page on one GitHub request for every public repository.
+    const languageDetails = await Promise.all(
+      repositories
+        .filter((repo) => repo.homepage || portfolio.featuredRepoNames.some((name) => name === repo.name))
+        .sort((left, right) => right.score - left.score)
+        .slice(0, 12)
+        .map(async (repo) => {
+          const source = repoResponse.find((item) => item.id === repo.id);
+          if (!source) return repo;
+          try {
+            const languages = await fetchGithubJson<Record<string, number>>(source.languages_url);
+            return normalizeRepo(source, languages);
+          } catch {
+            return repo;
+          }
         })
     );
+    const detailedById = new Map(languageDetails.map((repo) => [repo.id, repo]));
+    const allRepositories = repositories.map((repo) => detailedById.get(repo.id) ?? repo);
 
-    const polishedRepos = repositories
+    const polishedRepos = allRepositories
       .filter(isPolishedRepo)
       .sort((left, right) => right.score - left.score);
 
     const featuredRepos = polishedRepos.slice(0, 3);
-    const liveRepos = repositories
+    const liveRepos = allRepositories
       .filter((repo) => repo.homepage)
       .sort(
         (left, right) =>
@@ -257,14 +270,16 @@ export async function getPortfolioGithubData(): Promise<PortfolioGithubData> {
         avatarUrl: profileResponse.avatar_url,
         bio:
           profileResponse.bio ??
-          "Frontend-focused developer building polished web experiences.",
+          "Full stack developer building complete web experiences.",
         publicRepos: profileResponse.public_repos,
         followers: profileResponse.followers,
         following: profileResponse.following,
         createdAt: profileResponse.created_at,
         updatedAt: profileResponse.updated_at,
       },
-      repos: polishedRepos,
+      repos: allRepositories
+        .filter((repo) => repo.name.toLowerCase() !== portfolio.githubUsername.toLowerCase())
+        .sort((left, right) => right.score - left.score),
       featuredRepos,
       liveRepos,
       activity,
@@ -276,7 +291,7 @@ export async function getPortfolioGithubData(): Promise<PortfolioGithubData> {
         name: portfolio.fullName,
         url: portfolio.githubUrl,
         avatarUrl: portfolio.avatarUrl,
-        bio: "Frontend-focused developer building polished web experiences.",
+        bio: "Full stack developer building complete web experiences.",
         publicRepos: 0,
         followers: 0,
         following: 0,
