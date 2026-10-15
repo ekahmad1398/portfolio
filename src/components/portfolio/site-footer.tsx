@@ -5,10 +5,11 @@ import type { SocialLink } from "@/data/portfolio";
 type SiteFooterProps = {
   name: string;
   role: string;
+  githubUsername: string;
   socials: SocialLink[];
 };
 
-export function SiteFooter({ name, role, socials }: SiteFooterProps) {
+export function SiteFooter({ name, role, githubUsername, socials }: SiteFooterProps) {
   const currentYear = new Date().getFullYear();
   const githubLink = socials.find((social) =>
     social.label.toLowerCase().includes("github")
@@ -30,10 +31,12 @@ export function SiteFooter({ name, role, socials }: SiteFooterProps) {
               href={githubLink.href}
               target="_blank"
               rel="noreferrer"
-              className="secondary-button px-4 py-2.5"
+              aria-label={`Visit ${githubUsername}'s GitHub profile`}
+              className="inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-4 py-2.5 text-sm font-medium text-foreground shadow-sm transition hover:-translate-y-0.5 hover:border-primary/40 hover:bg-primary/5 hover:text-primary hover:shadow-md"
             >
               <Github size={16} />
-              GitHub
+              <span>GitHub</span>
+              <span className="border-l border-border pl-2 text-muted-foreground">@{githubUsername}</span>
             </a>
           ) : null}
 

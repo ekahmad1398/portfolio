@@ -305,7 +305,6 @@ export function ContactSection() {
             </div>
             <div className="flex flex-wrap items-center gap-4 md:justify-end">
               <Button asChild size="lg" className="h-11 rounded-lg bg-primary px-5 text-primary-foreground hover:bg-primary/90"><a href={`mailto:${portfolio.email}`}><Mail size={16} /> Email me</a></Button>
-              <a href={portfolio.githubUrl} target="_blank" rel="noreferrer" className="font-mono text-xs text-muted-foreground underline decoration-border underline-offset-4 transition hover:text-foreground">GitHub <span className="text-primary">@{portfolio.githubUsername}</span></a>
             </div>
           </div>
         </div>

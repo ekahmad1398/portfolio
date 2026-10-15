@@ -49,6 +49,7 @@ export default async function HomePage() {
           <SiteFooter
             name={portfolio.fullName}
             role={portfolio.role}
+            githubUsername={portfolio.githubUsername}
             socials={portfolio.socialLinks}
           />
         </div>
