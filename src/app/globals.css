@@ -6,8 +6,8 @@
 
 :root {
   color-scheme: light;
-  --bg-start: #e9e6f0;
-  --bg-end: #ded9e9;
+  --bg-start: #e0dce8;
+  --bg-end: #d4cfdf;
   --bg-radial-1: rgba(155, 131, 226, 0.13);
   --bg-radial-2: rgba(204, 176, 225, 0.11);
   --bg-radial-3: rgba(126, 111, 175, 0.045);
@@ -32,7 +32,7 @@
   --shadow-soft: 0 18px 42px rgba(53, 43, 74, 0.1);
   --shadow-strong: 0 26px 64px rgba(53, 43, 74, 0.15);
   --grid-line: rgba(84, 70, 120, 0.04);
-  --background: #e9e6f0;
+  --background: #e0dce8;
   --foreground: #191623;
   --card: #fcfbfe;
   --card-foreground: #191623;
@@ -368,8 +368,8 @@ body {
 
 .site-atmosphere {
   background:
-    radial-gradient(ellipse at 76% 18%, rgba(150, 190, 255, 0.13), transparent 40%),
-    linear-gradient(145deg, #f8faff 0%, #f0f4fb 52%, #f8f7fc 100%);
+    radial-gradient(ellipse at 76% 18%, rgba(139, 92, 246, 0.18), transparent 40%),
+    linear-gradient(145deg, #e4e0eb 0%, #d7d2e1 52%, #e1dce8 100%);
 }
 
 .dark .site-atmosphere {
@@ -396,10 +396,10 @@ body {
   left: 28%;
   width: 125vw;
   height: 76vh;
-  border: 1px solid rgba(37, 99, 235, 0.12);
+  border: 1px solid rgba(37, 99, 235, 0.22);
   border-radius: 50%;
-  background: radial-gradient(ellipse at 48% 0%, rgba(96, 165, 250, 0.09), transparent 67%);
-  box-shadow: 0 -10px 48px rgba(59, 130, 246, 0.035);
+  background: radial-gradient(ellipse at 48% 0%, rgba(96, 165, 250, 0.13), transparent 67%);
+  box-shadow: 0 -10px 48px rgba(59, 130, 246, 0.065);
   transform: rotate(-17deg);
   animation: site-wave-drift 20s ease-in-out infinite alternate;
 }
@@ -419,7 +419,7 @@ body {
   left: 14%;
   width: 140vw;
   height: 84vh;
-  border-color: rgba(99, 102, 241, 0.11);
+  border-color: rgba(99, 102, 241, 0.2);
   background: transparent;
   box-shadow: none;
   transform: rotate(-22deg);
@@ -431,7 +431,7 @@ body {
   left: 8%;
   width: 150vw;
   height: 92vh;
-  border-color: rgba(8, 145, 178, 0.09);
+  border-color: rgba(8, 145, 178, 0.18);
   background: transparent;
   box-shadow: none;
   transform: rotate(-25deg);
@@ -443,7 +443,7 @@ body {
   height: 24rem;
   border-radius: 9999px;
   filter: blur(110px);
-  opacity: 0.09;
+  opacity: 0.13;
   background: #3b82f6;
 }
 
@@ -535,6 +535,16 @@ body {
   animation: project-border-spin 1.8s linear infinite;
 }
 
+html:not(.dark) .hero-panel::after {
+  opacity: 0.9;
+  background: conic-gradient(from var(--project-border-angle), transparent 0deg 245deg, rgba(8, 145, 178, 0.62) 295deg, rgba(109, 40, 217, 0.58) 335deg, transparent 360deg);
+}
+
+html:not(.dark) .hero-panel:hover::after,
+html:not(.dark) .hero-panel:focus-within::after {
+  background: conic-gradient(from var(--project-border-angle), transparent 0deg 270deg, #0891b2 305deg, #7c3aed 335deg, transparent 360deg);
+}
+
 .about-portrait {
   isolation: isolate;
   transform: perspective(900px) rotateX(var(--portrait-tilt-x, 0deg)) rotateY(var(--portrait-tilt-y, 0deg));
@@ -558,6 +568,11 @@ body {
   mask-composite: exclude;
   transition: opacity 180ms ease;
   animation: project-border-spin 14s linear infinite;
+}
+
+html:not(.dark) .about-portrait::after {
+  opacity: 0.95;
+  background: conic-gradient(from var(--project-border-angle), transparent 0deg 245deg, rgba(8, 145, 178, 0.68) 295deg, rgba(109, 40, 217, 0.62) 335deg, transparent 360deg);
 }
 
 .about-portrait:hover {
@@ -623,6 +638,11 @@ html:not(.dark) .hero-workspace .hero-panel:hover {
   transform: perspective(900px) rotateX(var(--tilt-y, 0deg)) rotateY(var(--tilt-x, 0deg)) scale(1.015);
   border-color: rgba(8, 145, 178, 0.5);
   box-shadow: 0 24px 64px rgba(8, 145, 178, 0.18), 0 0 0 1px rgba(8, 145, 178, 0.12);
+}
+
+html:not(.dark) .about-portrait:hover {
+  box-shadow: 0 24px 64px rgba(8, 145, 178, 0.28), 0 0 0 1px rgba(109, 40, 217, 0.2);
+  filter: brightness(1.04) saturate(1.12);
 }
 
 html:not(.dark) .hero-workspace .hero-panel [class~="text-white"],
