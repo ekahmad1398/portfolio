@@ -164,12 +164,25 @@ export function HeroSection({ githubData }: { githubData: PortfolioGithubData })
   );
 }
 export function AboutSection({ avatarUrl }: { avatarUrl: string }) {
+  const trackPortraitPointer = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === "touch") return;
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const x = (event.clientX - bounds.left) / bounds.width;
+    const y = (event.clientY - bounds.top) / bounds.height;
+    event.currentTarget.style.setProperty("--portrait-tilt-x", `${((0.5 - y) * 9).toFixed(2)}deg`);
+    event.currentTarget.style.setProperty("--portrait-tilt-y", `${((x - 0.5) * 9).toFixed(2)}deg`);
+  };
+  const resetPortraitPointer = (event: ReactPointerEvent<HTMLDivElement>) => {
+    event.currentTarget.style.setProperty("--portrait-tilt-x", "0deg");
+    event.currentTarget.style.setProperty("--portrait-tilt-y", "0deg");
+  };
+
   return (
     <section id="about" className="section-shell">
       <div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
         <Reveal>
           <div className="max-w-sm">
-            <div className="relative aspect-square overflow-hidden rounded-2xl bg-muted">
+            <div onPointerMove={trackPortraitPointer} onPointerLeave={resetPortraitPointer} className="about-portrait relative aspect-square overflow-hidden rounded-2xl bg-muted">
               <Image src={avatarUrl} alt={`${portfolio.fullName} portrait`} fill sizes="(max-width: 768px) 320px, 420px" className="object-cover object-center grayscale-[18%]" />
             </div>
             <div className="mt-4 flex items-center justify-between border-b border-border pb-3">

@@ -535,6 +535,37 @@ body {
   animation: project-border-spin 1.8s linear infinite;
 }
 
+.about-portrait {
+  isolation: isolate;
+  transform: perspective(900px) rotateX(var(--portrait-tilt-x, 0deg)) rotateY(var(--portrait-tilt-y, 0deg));
+  transform-style: preserve-3d;
+  transition: transform 180ms cubic-bezier(.2,.7,.2,1), box-shadow 260ms ease, filter 260ms ease;
+  will-change: transform;
+}
+
+.about-portrait::after {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  padding: 2px;
+  border-radius: inherit;
+  background: conic-gradient(from var(--project-border-angle), transparent 0deg 245deg, rgba(103, 232, 249, 0.38) 295deg, rgba(129, 140, 248, 0.38) 335deg, transparent 360deg);
+  content: "";
+  opacity: 0.65;
+  pointer-events: none;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  transition: opacity 180ms ease;
+  animation: project-border-spin 14s linear infinite;
+}
+
+.about-portrait:hover {
+  transform: perspective(900px) rotateX(var(--portrait-tilt-x, 0deg)) rotateY(var(--portrait-tilt-y, 0deg)) scale(1.015);
+  box-shadow: 0 24px 64px rgba(8, 145, 178, 0.2), 0 0 0 1px rgba(103, 232, 249, 0.16);
+  filter: brightness(1.06) saturate(1.06);
+}
+
 .typing-caret {
   display: inline-block;
   width: 2px;
@@ -670,6 +701,8 @@ html:not(.dark) .hero-workspace .hero-panel [class*="text-amber-"] {
   }
 
   .hero-panel { transform: none !important; }
+  .about-portrait { transform: none !important; }
+  .about-portrait::after { animation: none; }
   .hero-panel:hover::after,
   .hero-panel:focus-within::after,
   .hero-panel::after { animation: none; }
