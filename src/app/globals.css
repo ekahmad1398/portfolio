@@ -492,19 +492,21 @@ body {
   inset: 0;
   padding: 1px;
   border-radius: inherit;
-  background: conic-gradient(from var(--project-border-angle), transparent 0deg 270deg, #67e8f9 305deg, #818cf8 335deg, transparent 360deg);
+  background: conic-gradient(from var(--project-border-angle), transparent 0deg 245deg, rgba(103, 232, 249, 0.5) 295deg, rgba(129, 140, 248, 0.5) 335deg, transparent 360deg);
   content: "";
-  opacity: 0;
+  opacity: 0.72;
   pointer-events: none;
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   transition: opacity 180ms ease;
+  animation: project-border-spin 14s linear infinite;
 }
 
 .hero-panel:hover::after,
 .hero-panel:focus-within::after {
   opacity: 1;
+  background: conic-gradient(from var(--project-border-angle), transparent 0deg 270deg, #67e8f9 305deg, #818cf8 335deg, transparent 360deg);
   animation: project-border-spin 1.8s linear infinite;
 }
 
@@ -627,7 +629,8 @@ html:not(.dark) .hero-workspace .hero-panel [class*="text-amber-"] {
 
   .hero-panel { transform: none !important; }
   .hero-panel:hover::after,
-  .hero-panel:focus-within::after { animation: none; }
+  .hero-panel:focus-within::after,
+  .hero-panel::after { animation: none; }
 }
 
 a,
