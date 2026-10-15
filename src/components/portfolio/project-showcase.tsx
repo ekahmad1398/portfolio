@@ -28,6 +28,10 @@ function formatDate(value: string) {
 
 const projectAccents = ["#38bdf8", "#a78bfa", "#34d399", "#fb923c", "#f472b6", "#facc15"];
 
+function LiveLabel() {
+  return <span className="inline-flex min-w-[2.5rem] justify-center"><span className="sr-only">Live</span><span aria-hidden="true" className="inline-flex items-center"><span className="live-label-text">Live</span><span className="typing-caret ml-0.5 h-3 w-px bg-emerald-600 dark:bg-emerald-300" /></span></span>;
+}
+
 function RepoCard({ repo, index, featured = false }: { repo: GithubRepoCard; index: number; featured?: boolean }) {
   const accent = projectAccents[index % projectAccents.length];
   const isRumiSchool = repo.name.toLowerCase() === "rumiint";
@@ -46,7 +50,7 @@ function RepoCard({ repo, index, featured = false }: { repo: GithubRepoCard; ind
       <div aria-hidden="true" className="absolute inset-y-0 left-0 w-1 bg-[color:var(--project-accent)] opacity-50 transition-opacity group-hover:opacity-100" />
       <div className="flex items-center justify-between gap-3 pl-2">
         <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">{featured ? "Featured project" : `Project ${String(index + 1).padStart(2, "0")}`}</span>
-        {repo.homepage ? <span className="rounded-full border border-emerald-500/20 bg-emerald-500/[0.07] px-2.5 py-1 font-mono text-[9px] text-emerald-700 dark:text-emerald-300">{isRumiSchool ? "Education website" : "Live"}</span> : null}
+        {repo.homepage ? <span className="rounded-full border border-emerald-500/20 bg-emerald-500/[0.07] px-2.5 py-1 font-mono text-[9px] text-emerald-700 dark:text-emerald-300">{isRumiSchool ? "Education website" : <LiveLabel />}</span> : null}
       </div>
       <div className="mt-5 pl-2">
         <h3 className={`font-heading font-semibold tracking-tight text-foreground transition-colors group-hover:text-[color:var(--project-accent)] ${featured ? "text-2xl sm:text-3xl" : "text-lg"}`}>{isRumiSchool ? "Rumi International School" : repo.name}</h3>

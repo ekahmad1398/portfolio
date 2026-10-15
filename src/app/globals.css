@@ -545,12 +545,28 @@ body {
   animation: typing-caret-blink 900ms steps(2, start) infinite;
 }
 
+.live-label-text {
+  display: inline-block;
+  flex: none;
+  width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  animation: live-label-type 3.4s steps(4, end) infinite;
+}
+
+@keyframes live-label-type {
+  0%, 8% { width: 0; }
+  36%, 58% { width: 4ch; }
+  88%, 100% { width: 0; }
+}
+
 @keyframes typing-caret-blink {
   to { visibility: hidden; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .typing-caret { animation: none; }
+  .live-label-text { width: auto; animation: none; }
   .skill-marquee .group::after { animation: none; }
   .project-card:hover::after,
   .project-card:focus-within::after { animation: none; }
