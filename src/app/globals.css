@@ -219,6 +219,8 @@ html.js-ready .scroll-reveal.is-visible { opacity: 1; transform: translate3d(0,0
 .skill-marquee .group:hover { border-color: var(--skill-border-hover, var(--accent-strong)); background-color: var(--skill-surface-hover, var(--card)); }
 .skill-marquee .group > span:first-child { transition: border-color 250ms ease, background-color 250ms ease, box-shadow 250ms ease; }
 .skill-marquee .group:hover > span:first-child { border-color: var(--skill-border-hover, var(--accent-strong)); background-color: var(--skill-surface-hover, var(--card)); box-shadow: 0 0 24px var(--skill-glow, transparent); }
+.skill-marquee .group > span:first-child > svg { transition: transform 450ms cubic-bezier(.2,.7,.2,1); }
+.skill-marquee .group:hover > span:first-child > svg { transform: rotate(12deg) scale(1.08); }
 
 .site-header {
   background-color: rgba(233, 230, 240, 0.72);
@@ -257,7 +259,10 @@ html:not(.dark) .hero-tech-express { border-color: rgba(71, 65, 84, 0.2); color:
   isolation: isolate;
   background-image: radial-gradient(ellipse at 100% 0%, color-mix(in srgb, var(--project-accent) 10%, transparent), transparent 42%);
   box-shadow: 0 14px 34px rgba(39, 31, 64, .09);
-  transition: transform 280ms ease, border-color 280ms ease, background-color 280ms ease, box-shadow 280ms ease;
+  transform: perspective(900px) rotateX(var(--tilt-y, 0deg)) rotateY(var(--tilt-x, 0deg));
+  transform-style: preserve-3d;
+  transition: transform 140ms cubic-bezier(.2,.7,.2,1), border-color 280ms ease, background-color 280ms ease, box-shadow 280ms ease;
+  will-change: transform;
 }
 
 .project-card::after {
@@ -299,11 +304,12 @@ html:not(.dark) .hero-tech-express { border-color: rgba(71, 65, 84, 0.2); color:
 .project-card:hover::before { opacity: 1; }
 .dark .project-card { box-shadow: 0 18px 50px rgba(0, 0, 0, .2); }
 .project-card:hover {
-  transform: translateY(-5px);
+  transform: perspective(900px) rotateX(var(--tilt-y, 0deg)) rotateY(var(--tilt-x, 0deg)) scale(1.005);
   border-color: var(--project-accent);
   background-color: var(--project-tint);
   box-shadow: 0 18px 42px color-mix(in srgb, var(--project-accent) 16%, transparent);
 }
+.live-label-text { color: var(--project-accent); }
 
 .project-action {
   position: relative;
@@ -614,6 +620,9 @@ html:not(.dark) .about-portrait::after {
   .typing-caret { animation: none; }
   .live-label-text { width: auto; animation: none; }
   .skill-marquee .group::after { animation: none; }
+  .skill-marquee .group > span:first-child > svg { transition: none; }
+  .project-card { transition: border-color 280ms ease, background-color 280ms ease, box-shadow 280ms ease; }
+  .project-card { transform: none; }
   .project-card:hover::after,
   .project-card:focus-within::after { animation: none; }
   .project-action:hover::after,

@@ -2,7 +2,7 @@
 
 import { ArrowUpRight, Github } from "lucide-react";
 import { useState } from "react";
-import type { CSSProperties } from "react";
+import type { CSSProperties, PointerEvent as ReactPointerEvent } from "react";
 
 import type { GithubActivityItem, GithubRepoCard } from "@/lib/github";
 import { Button } from "@/components/ui/button";
@@ -29,7 +29,21 @@ function formatDate(value: string) {
 const projectAccents = ["#38bdf8", "#a78bfa", "#34d399", "#fb923c", "#f472b6", "#facc15"];
 
 function LiveLabel() {
-  return <span className="inline-flex min-w-[2.5rem] justify-center"><span className="sr-only">Live</span><span aria-hidden="true" className="inline-flex items-center"><span className="live-label-text">Live</span><span className="typing-caret ml-0.5 h-3 w-px bg-emerald-600 dark:bg-emerald-300" /></span></span>;
+  return <span className="live-label inline-flex min-w-[2.5rem] justify-center"><span className="sr-only">Live</span><span aria-hidden="true" className="inline-flex items-center"><span className="live-label-text">Live</span><span className="typing-caret ml-0.5 h-3 w-px bg-[color:var(--project-accent)]" /></span></span>;
+}
+
+function trackProjectPointer(event: ReactPointerEvent<HTMLElement>) {
+  if (event.pointerType === "touch") return;
+  const bounds = event.currentTarget.getBoundingClientRect();
+  const x = (event.clientX - bounds.left) / bounds.width;
+  const y = (event.clientY - bounds.top) / bounds.height;
+  event.currentTarget.style.setProperty("--tilt-x", `${((x - 0.5) * 3).toFixed(2)}deg`);
+  event.currentTarget.style.setProperty("--tilt-y", `${((0.5 - y) * 3).toFixed(2)}deg`);
+}
+
+function resetProjectPointer(event: ReactPointerEvent<HTMLElement>) {
+  event.currentTarget.style.setProperty("--tilt-x", "0deg");
+  event.currentTarget.style.setProperty("--tilt-y", "0deg");
 }
 
 function RepoCard({ repo, index, featured = false }: { repo: GithubRepoCard; index: number; featured?: boolean }) {
@@ -46,6 +60,8 @@ function RepoCard({ repo, index, featured = false }: { repo: GithubRepoCard; ind
     <article
       style={{ "--project-accent": accent, "--project-tint": `color-mix(in srgb, ${accent} 7%, var(--card))` } as CSSProperties & { "--project-accent": string; "--project-tint": string }}
       className={`project-card group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card p-5 transition duration-300 sm:p-6 ${featured ? "min-h-[17rem] sm:p-8" : ""}`}
+      onPointerMove={trackProjectPointer}
+      onPointerLeave={resetProjectPointer}
     >
       <div aria-hidden="true" className="absolute inset-y-0 left-0 w-1 bg-[color:var(--project-accent)] opacity-50 transition-opacity group-hover:opacity-100" />
       <div className="flex items-center justify-between gap-3 pl-2">
