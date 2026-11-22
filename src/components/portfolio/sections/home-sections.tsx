@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { ArrowRight, Circle, Database, Download, ExternalLink, Github, Mail, Server, ShieldCheck } from "lucide-react";
+import { ArrowRight, Circle, Database, Download, ExternalLink, Github, Mail, Server, ShieldCheck, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { CSSProperties, MouseEvent as ReactMouseEvent, PointerEvent as ReactPointerEvent } from "react";
 import type { IconType } from "react-icons";
@@ -284,11 +284,21 @@ export function AboutSection({ avatarUrl }: { avatarUrl: string }) {
 }
 
 export function SkillsSection() {
+  const [selectedSkill, setSelectedSkill] = useState<(typeof portfolio.skills)[number] | null>(null);
   const rows = [
     { title: "Frontend", note: "Interfaces and product experience", skills: ["React", "Next.js", "JavaScript", "TypeScript", "HTML", "CSS", "Tailwind CSS"] },
     { title: "Backend & data", note: "Application logic and persistence", skills: ["Node.js", "Express.js", "MongoDB"] },
     { title: "Languages & tools", note: "Programming, design, and development workflow", skills: ["C++", "Motion", "Canva", "Adobe Photoshop", "Git", "VS Code", "Vite"] },
   ];
+
+  useEffect(() => {
+    if (!selectedSkill) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setSelectedSkill(null);
+    };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [selectedSkill]);
 
   return (
     <section id="skills" className="section-shell skills-section">
@@ -318,10 +328,10 @@ export function SkillsSection() {
                         const skillMeta = skillIcons[skill.icon];
                         const SkillIcon = skillMeta.icon;
                         return (
-                          <div key={skill.name} style={{ "--skill-border-hover": skillMeta.accent, "--skill-surface-hover": `color-mix(in srgb, ${skillMeta.accent} 12%, var(--card))`, "--skill-glow": `color-mix(in srgb, ${skillMeta.accent} 18%, transparent)` } as CSSProperties & { "--skill-border-hover": string; "--skill-surface-hover": string; "--skill-glow": string }} className={`group flex min-w-[10.5rem] items-center gap-3 rounded-2xl border border-border bg-card/80 px-4 py-3.5 text-foreground shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg ${skillMeta.hover}`}>
+                          <button key={skill.name} type="button" onClick={() => setSelectedSkill(skill)} aria-label={`Learn about ${skill.name}`} style={{ "--skill-border-hover": skillMeta.accent, "--skill-surface-hover": `color-mix(in srgb, ${skillMeta.accent} 12%, var(--card))`, "--skill-glow": `color-mix(in srgb, ${skillMeta.accent} 18%, transparent)` } as CSSProperties & { "--skill-border-hover": string; "--skill-surface-hover": string; "--skill-glow": string }} className={`group flex min-w-[10.5rem] cursor-pointer items-center gap-3 rounded-2xl border border-border bg-card/80 px-4 py-3.5 text-left text-foreground shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${skillMeta.hover}`}>
                             <span className={`skill-icon flex size-11 shrink-0 items-center justify-center rounded-xl border transition-colors ${skillMeta.surface}`}><SkillIcon className={`${skill.icon === "javascript" ? "size-7" : "size-6"} transition-colors ${skillMeta.color}`} aria-hidden="true" /></span>
                             <span className="font-heading text-sm font-semibold tracking-tight">{skill.name}</span>
-                          </div>
+                          </button>
                         );
                       })}
                     </div>
@@ -343,6 +353,28 @@ export function SkillsSection() {
           </div>
         </Reveal>
       </div>
+      {selectedSkill && (() => {
+        const meta = skillIcons[selectedSkill.icon];
+        const SkillIcon = meta.icon;
+        return (
+          <div className="skill-dialog-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) setSelectedSkill(null); }}>
+            <section className="skill-dialog relative w-[min(27rem,calc(100vw-2rem))] overflow-hidden rounded-3xl border border-border bg-card p-6 text-card-foreground shadow-2xl sm:p-8" role="dialog" aria-modal="true" aria-labelledby="skill-dialog-title" aria-describedby="skill-dialog-description">
+              <div className="pointer-events-none absolute -right-12 -top-16 size-44 rounded-full opacity-20 blur-3xl" style={{ backgroundColor: meta.accent }} />
+              <button type="button" onClick={() => setSelectedSkill(null)} className="absolute right-4 top-4 z-10 rounded-full p-2 text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" aria-label="Close skill details"><X className="size-4" /></button>
+              <div className="skill-dialog-icon relative mb-6 flex size-20 items-center justify-center rounded-2xl border" style={{ borderColor: `${meta.accent}55`, backgroundColor: `${meta.accent}18`, boxShadow: `0 12px 40px ${meta.accent}22` }}>
+                <SkillIcon className={`size-10 ${meta.color}`} aria-hidden="true" />
+              </div>
+              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">{selectedSkill.category}</p>
+              <h3 id="skill-dialog-title" className="mt-2 font-heading text-2xl font-semibold tracking-tight">{selectedSkill.name}</h3>
+              <p id="skill-dialog-description" className="mt-3 text-sm leading-7 text-muted-foreground">{selectedSkill.description}</p>
+              <div className="mt-6 flex items-center gap-3">
+                <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted"><div className="skill-dialog-progress h-full rounded-full" style={{ width: `${selectedSkill.proficiency}%`, backgroundColor: meta.accent }} /></div>
+                <span className="font-mono text-xs text-muted-foreground">{selectedSkill.proficiency}%</span>
+              </div>
+            </section>
+          </div>
+        );
+      })()}
     </section>
   );
 }
