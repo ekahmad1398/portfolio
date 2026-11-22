@@ -727,16 +727,26 @@ body {
 }
 
 .skill-dialog { animation: skill-dialog-in 420ms cubic-bezier(.16, 1, .3, 1) both; }
-.skill-dialog-icon { animation: skill-icon-pop 650ms cubic-bezier(.16, 1, .3, 1) both; }
-.skill-dialog-progress { animation: skill-progress-in 700ms 180ms cubic-bezier(.2, .7, .2, 1) both; transform-origin: left; }
+.skill-dialog-icon { animation: skill-icon-pop 760ms 80ms cubic-bezier(.16, 1, .3, 1) both; transform-origin: center; }
+.skill-dialog-copy { animation: skill-copy-in 420ms cubic-bezier(.2, .7, .2, 1) both; }
+.skill-dialog-category { animation-delay: 180ms; }
+.skill-dialog-title { animation-delay: 250ms; }
+.skill-dialog-description { animation-delay: 320ms; }
+.skill-dialog-level { animation-delay: 390ms; }
+.skill-dialog-progress { animation: skill-progress-in 700ms 480ms cubic-bezier(.2, .7, .2, 1) both; transform-origin: left; }
+.skill-dialog-backdrop.is-closing { animation: skill-backdrop-out 320ms ease-in both; }
+.skill-dialog.is-closing { animation: skill-dialog-out 320ms cubic-bezier(.4, 0, 1, 1) both; }
 
 @keyframes skill-backdrop-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes skill-backdrop-out { from { opacity: 1; } to { opacity: 0; } }
 @keyframes skill-dialog-in { from { opacity: 0; transform: translateY(18px) scale(.94); } to { opacity: 1; transform: translateY(0) scale(1); } }
-@keyframes skill-icon-pop { 0% { opacity: 0; transform: scale(.55) rotate(-16deg); } 65% { opacity: 1; transform: scale(1.12) rotate(5deg); } 100% { transform: scale(1) rotate(0); } }
+@keyframes skill-dialog-out { to { opacity: 0; transform: translateY(12px) scale(.92); filter: blur(5px); } }
+@keyframes skill-icon-pop { 0% { opacity: 0; transform: scale(.4) rotate(-24deg); border-radius: 50%; } 55% { opacity: 1; transform: scale(1.16) rotate(7deg); border-radius: 1.5rem; } 78% { transform: scale(.96) rotate(-2deg); } 100% { transform: scale(1) rotate(0); border-radius: 1rem; } }
+@keyframes skill-copy-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes skill-progress-in { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .skill-dialog-backdrop, .skill-dialog, .skill-dialog-icon, .skill-dialog-progress { animation-duration: 1ms; animation-delay: 0ms; }
+  .skill-dialog-backdrop, .skill-dialog, .skill-dialog-icon, .skill-dialog-copy, .skill-dialog-progress { animation-duration: 1ms; animation-delay: 0ms; }
 }
 
 @media (min-width: 1200px) and (hover: hover) and (pointer: fine) {
